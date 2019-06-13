@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta>
+  <title>@model.title</title>
+
+  <link rel="stylesheet" href="/stylesheets/bootstrap.css" />
+  <link rel="stylesheet" href="/stylesheets/trumbowyg.css" />
+  <link rel='stylesheet' href='/stylesheets/style.css' />
+
+  <script src="/javascripts/jquery.js"></script>
+  <script src="/javascripts/bootstrap.js"></script>
+  <script src="/javascripts/trumbowyg.js"></script>
+
+</head>
+<body class="text-white bg-dark">
+<div class="row">
+    <nav class="navbar navbar-expand-lg">
+        <a class="navbar-brand" href="/">TODO: name of blog website</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav mr-auto">
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                administration
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <a class="dropdown-item" href="/post/">posts</a>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </nav>
+</div>
+<div class="clearfix"></div>
+@html.block('maxwidthcontent')
+  <div class="row">
+    <div class="col align-self-start">
+      @html.block('right')
+    </div>
+    <div class="col">
+
+      @html.block('content')
+    </div>
+    <div class="col">
+      @html.block('left')
+    </div>
+  </div>
+  <div class="clearfix"></div>
+        <footer class="fixed-bottom text-center">
+    welcome to nugget nova, my name is Thomas Reese. web programmer, military veteran and proud U.S. citizen.
+    <a href="https://github.com/tomjar" target="_blank">github</a> <a href="https://linkedin.com/in/tom-reese-b47049157" target="_blank">linkedin</a>
+    <br />
+    <br />
+    </footer>
+
+
+</body>
+
+</html>

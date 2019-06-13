@@ -1,0 +1,21 @@
+@html.extend('layout', function(model) {
+  @html.block('maxwidthcontent', function(model) {
+    <h1>@model.title</h1>
+    <form action=''>
+    </form>
+    <a href='/post/@model.post.postid'>save changes</a>
+	<div class="card">
+  <div class="card-body">
+    <div id="div-post-body-editor" style="color:black;">@model.post.body</div>
+  </div>
+  
+</div>
+      <script>
+        $(document).ready(function(){
+          // Doing this in a loaded JS file is better, I put this here for simplicity
+          var myTrumboSettings = {tagsToRemove: ['script', 'link']};
+          $('#div-post-body-editor').trumbowyg(myTrumboSettings);
+        });
+      </script>
+  })    
+})

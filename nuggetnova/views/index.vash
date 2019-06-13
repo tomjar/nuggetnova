@@ -1,0 +1,22 @@
+@html.extend('layout', function(model) {
+
+  @html.block('left', function(model){
+    <h5>Most Viewed</h5>
+  });
+
+  @html.block('content', function(model) {
+    <h5>Recent</h5>
+    @model.posts.forEach(function(item){
+      <div class="card text-white bg-dark mb-3">
+        <div class="card-body">
+          <h5 class="card-title"><a href='post/view/@item.postid'>@item.title</a></h5>
+          <h6 class="card-subtitle text-muted" style="font-size:xx-small;"><i>@item.createtimestamp</i></h6>
+        </div>
+      </div>
+    })
+  });
+
+  @html.block('right', function(model){
+    <h5>Archive</h5>
+  });
+})
