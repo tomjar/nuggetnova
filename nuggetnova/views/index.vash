@@ -1,9 +1,4 @@
 @html.extend('layout', function(model) {
-
-  @html.block('left', function(model){
-    <h5>Most Viewed</h5>
-  });
-
   @html.block('content', function(model) {
     <h5>Recent</h5>
     @model.posts.forEach(function(item){
@@ -14,9 +9,5 @@
         </div>
       </div>
     })
-  });
-
-  @html.block('right', function(model){
-    <h5>Archive</h5>
   });
 })

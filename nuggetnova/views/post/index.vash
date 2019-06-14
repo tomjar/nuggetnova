@@ -9,7 +9,7 @@
     @model.posts.forEach(function(item){
       <tr>
 	      <td>@item.title</td>
-        <td><a href='edit/@item.postid'>edit</a></td>
+        <td><a href='/post/edit/@item.postid'>edit</a><a class="btn btn-danger" href='/post/delete/@item.postid'>delete</a></td>
       </tr>
     })
     </table>

@@ -15,8 +15,11 @@
 </head>
 <body class="text-white bg-dark">
 <div class="row">
-    <nav class="navbar navbar-expand-lg">
-        <a class="navbar-brand" href="/">TODO: name of blog website</a>
+    <div class="col align-self-start">
+    </div>
+    <div class="col">
+          <nav class="navbar navbar-expand-lg">
+        <a class="navbar-brand" href="/">nugget nova</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
@@ -29,20 +32,23 @@
               </a>
               <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                 <a class="dropdown-item" href="/post/">posts</a>
+                <a class="dropdown-item" href="/post/add">add new post</a>
               </div>
             </li>
           </ul>
         </div>
       </nav>
+    </div>
+    <div class="col">
+    </div>
+
 </div>
 <div class="clearfix"></div>
-@html.block('maxwidthcontent')
   <div class="row">
     <div class="col align-self-start">
       @html.block('right')
     </div>
-    <div class="col">
-
+    <div class="col col-md-6">
       @html.block('content')
     </div>
     <div class="col">
@@ -53,6 +59,7 @@
         <footer class="fixed-bottom text-center">
     welcome to nugget nova, my name is Thomas Reese. web programmer, military veteran and proud U.S. citizen.
     <a href="https://github.com/tomjar" target="_blank">github</a> <a href="https://linkedin.com/in/tom-reese-b47049157" target="_blank">linkedin</a>
+    <br />
     <br />
     <br />
     </footer>

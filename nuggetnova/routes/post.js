@@ -14,9 +14,25 @@ router.get('/', (req, res, next) => {
   })
 });
 
+// add
+router.get('/add', (req, res, next) => {
+    res.render('post/add', { title: 'add new post', post: ''});
+}).post('/add', (req, res, next) => {
+  let postTitle = req.body.postTitle;
+  // add more fields if needed
+
+  db.query('INSERT INTO pgf."Post"(postid, title, createtimestamp, modifytimestamp)VALUES (uuid_generate_v1(), $1, now(), NULL);', [postTitle], (err, qres) =>{
+    if(err){
+      return next(err);
+    }
+
+    res.redirect('/post');
+  })
+});
+
 // edit
 // now()
-// SELECT uuid_generate_v1();
+// uuid_generate_v1();
 router.get('/edit/:id', (req, res, next) => {
   let id = req.params.id;
   db.query('SELECT * FROM pgf."Post" where postid = $1;', [id], (err, qres) => {
@@ -24,7 +40,7 @@ router.get('/edit/:id', (req, res, next) => {
       return next(err)
     }
     let data = qres.rows[0];
-    res.render('post/edit', { title: 'edit post', post: data});
+    res.render('post/edit', { title: data.title, post: data});
   })
 });
 
@@ -36,13 +52,34 @@ router.get('/view/:id', (req, res, next) => {
       return next(err)
     }
     let data = qres.rows[0];
-    res.render('post/view', { title: 'view post', post: data});
+    res.render('post/' + data.title, { title: data.title, post: data});
   })
 });
 
 // update
-router.post('', (req, res, next) =>{
+router.post('/update', (req, res, next) => {
+  let postTitle = req.body.postTitle,
+      postId = req.body.postId;
 
+  db.query('UPDATE pgf."Post" SET title = $1 WHERE postid = $2;', [postTitle, postId], (err, qres) =>{
+    if(err){
+      return next(err)
+    }
+    let data = qres.rows[0];
+    res.redirect('/post');
+  })
+});
+
+// delete
+router.get('/delete/:id', (req, res, next) => {
+  let id = req.params.id;
+  db.query('DELETE FROM pgf."Post" where postid = $1;', [id], (err, qres) => {
+    if (err) {
+      return next(err)
+    }
+    
+    res.redirect('/post');
+  })
 });
 
 
