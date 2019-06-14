@@ -1,11 +1,11 @@
 @html.extend('layout', function(model) {
   @html.block('content', function(model) {
     <h1>@model.title</h1>
-    <form method="post" action="/post/add">
+        <form method="post" action="/login">
         <div class="input-group mb-3">
-    <input type="text" class="form-control" name="postTitle" value='' placeholder="title" />
+    <input type="text" class="form-control" name="secretKey" value='' placeholder="secret encrypted key" />
   <div class="input-group-append">
-   <input type="submit" value="Add+" class="btn btn-primary" />
+   <input type="submit" value="Login" class="btn btn-primary" />
   </div>
 </div>
     </form>

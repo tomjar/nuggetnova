@@ -9,7 +9,17 @@
     @model.posts.forEach(function(item){
       <tr>
 	      <td>@item.title</td>
-        <td><a href='/post/edit/@item.postid'>edit</a><a class="btn btn-danger" href='/post/delete/@item.postid'>delete</a></td>
+        <td>
+          <div class="dropdown">
+            <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              Actions
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+              <a class="btn btn-default dropdown-item" href='/post/edit/@item.postid'>edit</a>
+              <a class="btn btn-danger dropdown-item" href='/post/delete/@item.postid'>delete</a>
+            </div>
+          </div>
+        </td>
       </tr>
     })
     </table>

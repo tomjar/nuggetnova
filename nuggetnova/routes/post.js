@@ -1,10 +1,14 @@
 var express = require('express');
 var router = express.Router();
 
-const db = require('../db');
+const db = require('../db/dev.index');
 
 // index
 router.get('/', (req, res, next) => {
+  if(req.session.isauthenticated == false){
+    res.redirect('/');
+  }
+
     db.query('SELECT * FROM pgf."Post";', (err, qres) => {
     if (err) {
       return next(err)
@@ -16,8 +20,17 @@ router.get('/', (req, res, next) => {
 
 // add
 router.get('/add', (req, res, next) => {
+  if(req.session.isauthenticated == false){
+    res.redirect('/');
+  }
+
     res.render('post/add', { title: 'add new post', post: ''});
 }).post('/add', (req, res, next) => {
+
+  if(req.session.isauthenticated == false){
+    res.redirect('/');
+  }
+
   let postTitle = req.body.postTitle;
   // add more fields if needed
 
@@ -34,6 +47,10 @@ router.get('/add', (req, res, next) => {
 // now()
 // uuid_generate_v1();
 router.get('/edit/:id', (req, res, next) => {
+  if(req.session.isauthenticated == false){
+    res.redirect('/');
+  }
+
   let id = req.params.id;
   db.query('SELECT * FROM pgf."Post" where postid = $1;', [id], (err, qres) => {
     if (err) {
@@ -58,6 +75,10 @@ router.get('/view/:id', (req, res, next) => {
 
 // update
 router.post('/update', (req, res, next) => {
+  if(req.session.isauthenticated == false){
+    res.redirect('/');
+  }
+
   let postTitle = req.body.postTitle,
       postId = req.body.postId;
 
@@ -72,6 +93,11 @@ router.post('/update', (req, res, next) => {
 
 // delete
 router.get('/delete/:id', (req, res, next) => {
+
+  if(req.session.isauthenticated == false){
+    res.redirect('/');
+  }
+
   let id = req.params.id;
   db.query('DELETE FROM pgf."Post" where postid = $1;', [id], (err, qres) => {
     if (err) {

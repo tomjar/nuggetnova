@@ -3,8 +3,14 @@
     <h1>@model.title</h1>
     <form method="post" action="/post/update">
     <input id="postId" name="postId" type="hidden" value='@model.post.postid' />
-    <input type="text" name="postTitle" value='@model.post.title' />
-    <input type="submit" value="Save changes" class="btn btn-primary" />
+    <div class="input-group mb-3">
+    <input type="text" class="form-control" name="postTitle" value='@model.post.title' placeholder="title" />
+  <div class="input-group-append">
+   <input type="submit" value="Save changes" class="btn btn-primary" />
+  </div>
+</div>
+
+    
     </form>
   })    
 })

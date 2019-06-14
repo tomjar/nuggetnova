@@ -1,5 +1,6 @@
 var createError = require('http-errors');
 var express = require('express');
+var session = require('express-session');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var lessMiddleware = require('less-middleware');
@@ -9,6 +10,14 @@ var indexRouter = require('./routes/index.js');
 var postsRouter = require('./routes/post.js');
 
 var app = express();
+// app.use(session({isauthenticated: false}));
+app.set('trust proxy', 1) // trust first proxy
+app.use(session({
+  secret: 'you apes wanna live forever',
+  resave: false,
+  saveUninitialized: true,
+  cookie: { secure: true }
+}))
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
