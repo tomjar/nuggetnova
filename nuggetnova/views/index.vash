@@ -2,12 +2,15 @@
   @html.block('content', function(model) {
     @model.posts.forEach(function(item){
       <div class="row">
-      <div class="col">
-      <h6 class="card-subtitle text-muted" style="font-size:xx-small;"><i>@item.createtimestamp</i></h6>
-      <h5 class="card-title"><a href='post/view/@item.postid'>@item.title</a></h5>
-                <p>
+      <div class="col col-lg-12">
+                      <p>
           @item.description
           </p>
+          <p>
+            <a href='post/view/@item.postid'>(see full post)</a>
+          </p>
+          <h6 class="text-muted" style="font-size:xx-small;"><i>@item.createtimestamp</i></h6>
+          <hr />
       </div>
       </div>
     })

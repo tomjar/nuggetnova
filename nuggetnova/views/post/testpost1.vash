@@ -3,6 +3,19 @@
     <h1>@model.title</h1>
     <p>This will be some amazing content for this test post 1!</p>
 <img src="https://placekitten.com/200/200" alt="cute kitten" />
+<div class="clearfix"><br /></div>
+<pre>
+<code>
+  var createError = require('http-errors');
+  var express = require('express');
+  var session = require('express-session');
+  var path = require('path');
+  var cookieParser = require('cookie-parser');
+  var lessMiddleware = require('less-middleware');
+  var logger = require('morgan');
+</code>
+</pre>
+
   })    
 })
 

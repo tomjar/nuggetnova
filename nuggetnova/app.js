@@ -39,11 +39,9 @@ app.use(cookieParser());
 app.use(lessMiddleware(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/stylesheets', express.static(__dirname +  '/node_modules/bootstrap/dist/css'));
-app.use('/stylesheets', express.static(__dirname +  '/node_modules/trumbowyg/dist/ui'));
 app.use('/javascripts', express.static(__dirname + '/node_modules/jquery/dist'));
 app.use('/javascripts', express.static(__dirname + '/node_modules/popper.js/dist'));
 app.use('/javascripts', express.static(__dirname +  '/node_modules/bootstrap/dist/js'));
-app.use('/javascripts', express.static(__dirname + '/node_modules/trumbowyg/dist'));
 
 app.use('/', indexRouter);
 app.use('/post', postsRouter);
