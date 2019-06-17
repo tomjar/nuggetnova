@@ -4,6 +4,7 @@ var router = express.Router();
 // TODO: change when in prod
 const db = require('../db/dev.index');
 
+// home
 router.get('/', (req, res, next) => {
     db.query('SELECT * FROM pgf."Post" WHERE publishpost = true ORDER BY createtimestamp DESC;', (err, qres) => {
     if (err) {
@@ -15,6 +16,11 @@ router.get('/', (req, res, next) => {
   })
 });
 
+// about
+router.get('/about', (req, res, next) => {
+  res.render('about', {title: 'about'});
+});
+
 // logout
 router.get('/logout', (req, res, next) => {
   req.session.destroy(function(err) {
@@ -22,6 +28,7 @@ router.get('/logout', (req, res, next) => {
   });
 });
 
+// login
 router.get('/login', (req, res, next) => {
   res.render('login', {title: 'Login'});
 }).post('/login', (req, res, next) => {
