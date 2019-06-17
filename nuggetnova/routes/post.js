@@ -1,64 +1,68 @@
 var express = require('express');
 var router = express.Router();
 
+// TODO: change when in prod
 const db = require('../db/dev.index');
 
 // index
 router.get('/', (req, res, next) => {
-  if(req.session.isauthenticated == false){
+  if (req.session.isauthenticated) {
+    db.query('SELECT * FROM pgf."Post";', (err, qres) => {
+      if (err) {
+        return next(err)
+      }
+      let data = qres.rows;
+      res.render('post/index', { title: 'all posts', isauthenticated: req.session.isauthenticated, posts: data });
+    })
+  } else {
     res.redirect('/');
   }
-
-    db.query('SELECT * FROM pgf."Post";', (err, qres) => {
-    if (err) {
-      return next(err)
-    }
-    let data = qres.rows;
-    res.render('post/index', { title: 'all posts', posts: data});
-  })
 });
 
 // add
 router.get('/add', (req, res, next) => {
-  if(req.session.isauthenticated == false){
+  if (req.session.isauthenticated) {
+    res.render('post/add', { title: 'add new post', isauthenticated: req.session.isauthenticated, post: '' });
+  } else {
     res.redirect('/');
   }
-
-    res.render('post/add', { title: 'add new post', post: ''});
 }).post('/add', (req, res, next) => {
+  if (req.session.isauthenticated) {
+    let postTitle = req.body.postTitle,
+      postPublish = req.body.postPublish,
+      postDescription = req.body.postDescription;
 
-  if(req.session.isauthenticated == false){
+    // add more fields if needed
+    db.query('INSERT INTO pgf."Post"(postid, title, createtimestamp, modifytimestamp, publishpost,description) VALUES (uuid_generate_v1(), $1, now(), NULL, $2, $3);', [postTitle, postPublish, postDescription], (err, qres) => {
+      if (err) {
+        return next(err);
+      }
+
+      res.redirect('/post');
+    })
+
+  } else {
     res.redirect('/');
   }
-
-  let postTitle = req.body.postTitle;
-  // add more fields if needed
-
-  db.query('INSERT INTO pgf."Post"(postid, title, createtimestamp, modifytimestamp)VALUES (uuid_generate_v1(), $1, now(), NULL);', [postTitle], (err, qres) =>{
-    if(err){
-      return next(err);
-    }
-
-    res.redirect('/post');
-  })
 });
 
 // edit
 // now()
 // uuid_generate_v1();
 router.get('/edit/:id', (req, res, next) => {
-  if(req.session.isauthenticated == false){
+  if (req.session.isauthenticated) {
+    let id = req.params.id;
+    db.query('SELECT * FROM pgf."Post" where postid = $1;', [id], (err, qres) => {
+      if (err) {
+        return next(err)
+      }
+      let data = qres.rows[0];
+      res.render('post/edit', { title: data.title, isauthenticated: req.session.isauthenticated, post: data });
+    })
+
+  } else {
     res.redirect('/');
   }
-
-  let id = req.params.id;
-  db.query('SELECT * FROM pgf."Post" where postid = $1;', [id], (err, qres) => {
-    if (err) {
-      return next(err)
-    }
-    let data = qres.rows[0];
-    res.render('post/edit', { title: data.title, post: data});
-  })
 });
 
 // view
@@ -69,43 +73,44 @@ router.get('/view/:id', (req, res, next) => {
       return next(err)
     }
     let data = qres.rows[0];
-    res.render('post/' + data.title, { title: data.title, post: data});
+    res.render('post/' + data.title, { title: data.title, isauthenticated: req.session.isauthenticated, post: data });
   })
 });
 
 // update
 router.post('/update', (req, res, next) => {
-  if(req.session.isauthenticated == false){
-    res.redirect('/');
-  }
-
-  let postTitle = req.body.postTitle,
+  if (req.session.isauthenticated) {
+    let postTitle = req.body.postTitle,
+      postPublish = req.body.postPublish,
+      postDescription = req.body.postDescription,
       postId = req.body.postId;
 
-  db.query('UPDATE pgf."Post" SET title = $1 WHERE postid = $2;', [postTitle, postId], (err, qres) =>{
-    if(err){
-      return next(err)
-    }
-    let data = qres.rows[0];
-    res.redirect('/post');
-  })
+    db.query('UPDATE pgf."Post" SET title=$1, modifytimestamp=now(), publishpost=$2, description=$3 WHERE postid = $4;', [postTitle, postPublish, postDescription, postId], (err, qres) => {
+      if (err) {
+        return next(err)
+      }
+
+      res.redirect('/post');
+    })
+  } else {
+    res.redirect('/');
+  }
 });
 
 // delete
 router.get('/delete/:id', (req, res, next) => {
+  if (req.session.isauthenticated) {
+    let id = req.params.id;
+    db.query('DELETE FROM pgf."Post" where postid = $1;', [id], (err, qres) => {
+      if (err) {
+        return next(err)
+      }
+      res.redirect('/post');
+    })
 
-  if(req.session.isauthenticated == false){
+  } else {
     res.redirect('/');
   }
-
-  let id = req.params.id;
-  db.query('DELETE FROM pgf."Post" where postid = $1;', [id], (err, qres) => {
-    if (err) {
-      return next(err)
-    }
-    
-    res.redirect('/post');
-  })
 });
 
 

@@ -1,12 +1,14 @@
 @html.extend('layout', function(model) {
   @html.block('content', function(model) {
-    <h5>Recent</h5>
     @model.posts.forEach(function(item){
-      <div class="card text-white bg-dark mb-3">
-        <div class="card-body">
-          <h5 class="card-title"><a href='post/view/@item.postid'>@item.title</a></h5>
-          <h6 class="card-subtitle text-muted" style="font-size:xx-small;"><i>@item.createtimestamp</i></h6>
-        </div>
+      <div class="row">
+      <div class="col">
+      <h6 class="card-subtitle text-muted" style="font-size:xx-small;"><i>@item.createtimestamp</i></h6>
+      <h5 class="card-title"><a href='post/view/@item.postid'>@item.title</a></h5>
+                <p>
+          @item.description
+          </p>
+      </div>
       </div>
     })
   });

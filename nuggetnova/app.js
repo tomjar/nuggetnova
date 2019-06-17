@@ -10,14 +10,23 @@ var indexRouter = require('./routes/index.js');
 var postsRouter = require('./routes/post.js');
 
 var app = express();
-// app.use(session({isauthenticated: false}));
 app.set('trust proxy', 1) // trust first proxy
-app.use(session({
+
+var app = express()
+var sess = {
   secret: 'you apes wanna live forever',
   resave: false,
   saveUninitialized: true,
-  cookie: { secure: true }
-}))
+  cookie: {}
+}
+
+if (app.get('env') === 'production') {
+  app.set('trust proxy', 1) // trust first proxy
+  sess.cookie.secure = true // serve secure cookies
+}
+
+app.use(session(sess))
+
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

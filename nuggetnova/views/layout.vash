@@ -15,10 +15,10 @@
 <div class="row">
     <div class="col align-self-start">
     </div>
-    <div class="col">
+    <div class="col col-md-6">
           <nav class="navbar navbar-expand-lg">
         <a class="navbar-brand" href="/">nugget nova</a>
-        @if(model.authenticated){
+        @if(model.isauthenticated){
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
@@ -31,6 +31,7 @@
               <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                 <a class="dropdown-item" href="/post/">posts</a>
                 <a class="dropdown-item" href="/post/add">add new post</a>
+                <a class="dropdown-item" href="/logout">logout</a>
               </div>
             </li>
           </ul>

@@ -1,37 +1,39 @@
 var express = require('express');
 var router = express.Router();
 
+// TODO: change when in prod
 const db = require('../db/dev.index');
 
 router.get('/', (req, res, next) => {
-    db.query('SELECT * FROM pgf."Post";', (err, qres) => {
+    db.query('SELECT * FROM pgf."Post" WHERE publishpost = true ORDER BY createtimestamp DESC;', (err, qres) => {
     if (err) {
       return next(err)
     }
-    let data = qres.rows,
-        isAuth = false;
-    if (req.session.isauthenticated){
-      isAuth = req.session.isauthenticated;
-    }else{
-      isAuth = false;
-    }
 
-    res.render('index', { title: 'nugget nova', authenticated: isAuth, posts: data});
+    let data = qres.rows;
+    res.render('index', { title: 'nugget nova', isauthenticated: req.session.isauthenticated, posts: data});
   })
+});
+
+// logout
+router.get('/logout', (req, res, next) => {
+  req.session.destroy(function(err) {
+    res.redirect('/');
+  });
 });
 
 router.get('/login', (req, res, next) => {
   res.render('login', {title: 'Login'});
 }).post('/login', (req, res, next) => {
   let key = req.body.secretKey;
-  // encrypt it + salt it
-  // validate it
+  // encrypt it + salt it ?
   db.query('SELECT * FROM pgf."Authentication" WHERE key = $1;', [key], (err, qres) => {
     let data = qres.rows[0];
-    
     if (data){
       req.session.isauthenticated = true;
       res.redirect('/');
+    }else{
+      return next(err);
     }
   })
 });
