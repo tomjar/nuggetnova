@@ -1,8 +1,16 @@
 var express = require('express');
 var router = express.Router();
+var app = express();
 
-// TODO: change when in prod
-const db = require('../db/dev.index');
+function getDataBaseConnection(app){
+  if (app.get('env') === 'production'){
+    return require('../db/prod.index.js')
+  }else{
+    return require('../db/dev.index')
+  }
+}
+
+const db = getDataBaseConnection(app);
 
 // index
 router.get('/', (req, res, next) => {

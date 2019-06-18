@@ -1,18 +1,33 @@
 @html.extend('layout', function(model) {
   @html.block('content', function(model) {
     <h1>@model.title</h1>
-    <p>
-        Welcome to nugget nova, my name is Thomas Reese. The purpose of this website to share things on my mind, talk a little bit about myself, and grab a little tiny slice of the internet for myself. This website you are viewing was built with <a href="https://nodejs.org/en/" target="_blank">nodejs</a>, <a href ="https://github.com/expressjs/" target="_blank">expressjs</a>, <a href="https://www.postgresql.org/" target="_blank">PostgreSQL</a>. The frontend uses <a href="https://getbootstrap.com" target="_blank">Bootstrap</a>, and the <a href="https://github.com/kirbysayshi/vash" target="_blank">vash template engine</a>. The source code for this website can be found <a href="https://github.com/tomjar/nuggetnova" target="_blank">here</a>.
-    
-    </p>
-    <p>
-        In my free time I enjoy riding my bicycle up and down the Katy Trail which stretches across the state of Missouri. I also enjoy fishing on the numerous fresh water lakes and rivers located in Missouri. My favorite type of fishing would be bass fishing with white bass a close second. Yes, I whole heartedly support Linux and a free and open source community. When I am not outside enjoying the weather I am playing RPG & FPS computer games, such as DOOM, The Witcher, and Castle Wolfenstein. I also have been known to read a few good science fiction novels, as well, in no particular order, Starship Troopers, Extinction Cycle, Children of Time, and many others. Welcome and please enjoy your stay!
-    </p>
-
-    <p>
-        <a href="https://github.com/tomjar" target="_blank">github</a> 
-        <a href="https://linkedin.com/in/tom-reese-b47049157" target="_blank">linkedin</a>
-    </p>
-
-  })    
+    <div class="row">
+      <div class="col p-3">
+          <img src="https://placekitten.com/300/300" class="rounded float-left" alt="thomas reese" height="300px" />
+      </div>
+      <div class="col shadow-lg rounded p-3">
+        <p>
+          Hello my name is Thomas Reese and welcome. The purpose of this website to share things on my mind, talk a little bit about myself, 
+          and grab a little tiny slice of the internet for myself. This website you are viewing was built with 
+          <a href="https://nodejs.org/en/" target="_blank">nodejs</a>, <a href ="https://github.com/expressjs/" target="_blank">expressjs</a>, 
+          <a href="https://www.postgresql.org/" target="_blank">PostgreSQL</a>. The frontend uses <a href="https://getbootstrap.com" target="_blank">Bootstrap</a>, 
+          and the <a href="https://github.com/kirbysayshi/vash" target="_blank">vash template engine</a>. 
+          The source code for this website can be found <a href="https://github.com/tomjar/nuggetnova" target="_blank">here</a>.
+        </p>
+        <p>
+            I enjoy riding my bicycle up and down the Katy Trail, fishing on the numerous fresh water lakes and rivers located in Missouri. 
+            My favorite type of fishing would be bass fishing with white bass coming in at a close second. I whole heartedly support Linux and a free and open 
+            source community. When I am not outside enjoying the weather I am playing RPG & FPS computer games, such as DOOM, The Witcher, 
+            and Castle Wolfenstein. I also have been known to read a few good science fiction novels, as well, in no particular order, 
+            Starship Troopers, Extinction Cycle, Children of Time, and many others. Once again welcome and please enjoy your stay!
+        </p>
+        <p>
+            <a href="https://github.com/tomjar" target="_blank">github</a> 
+            <a href="https://linkedin.com/in/tom-reese-b47049157" target="_blank">linkedin</a>
+        </p>
+      </div>
+      <div class="col">
+      </div>
+    </div>
+  })
 })
