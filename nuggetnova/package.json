@@ -1,6 +1,6 @@
 {
-  "name": "express_example",
-  "version": "0.0.0",
+  "name": "nuggetnova",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "start": "node ./bin/www"

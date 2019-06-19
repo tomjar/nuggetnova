@@ -1,16 +1,9 @@
 var express = require('express');
 var router = express.Router();
 var app = express();
+var connection = require('../db/connection.js');
 
-function getDataBaseConnection(app){
-  if (app.get('env') === 'production'){
-    return require('../db/prod.index.js')
-  }else{
-    return require('../db/dev.index')
-  }
-}
-
-const db = getDataBaseConnection(app);
+const db = connection.getDataBaseConnection(app);
 
 // index
 router.get('/', (req, res, next) => {
@@ -37,8 +30,8 @@ router.get('/add', (req, res, next) => {
 }).post('/add', (req, res, next) => {
   if (req.session.isauthenticated) {
     let postTitle = req.body.postTitle,
-      postPublish = req.body.postPublish,
-      postDescription = req.body.postDescription;
+        postPublish = req.body.postPublish,
+        postDescription = req.body.postDescription;
 
     // add more fields if needed
     db.query('INSERT INTO pgf."Post"(postid, title, createtimestamp, modifytimestamp, publishpost,description) VALUES (uuid_generate_v1(), $1, now(), NULL, $2, $3);', [postTitle, postPublish, postDescription], (err, qres) => {
@@ -55,8 +48,6 @@ router.get('/add', (req, res, next) => {
 });
 
 // edit
-// now()
-// uuid_generate_v1();
 router.get('/edit/:id', (req, res, next) => {
   if (req.session.isauthenticated) {
     let id = req.params.id;
@@ -89,9 +80,9 @@ router.get('/view/:id', (req, res, next) => {
 router.post('/update', (req, res, next) => {
   if (req.session.isauthenticated) {
     let postTitle = req.body.postTitle,
-      postPublish = req.body.postPublish,
-      postDescription = req.body.postDescription,
-      postId = req.body.postId;
+        postPublish = req.body.postPublish,
+        postDescription = req.body.postDescription,
+        postId = req.body.postId;
 
     db.query('UPDATE pgf."Post" SET title=$1, modifytimestamp=now(), publishpost=$2, description=$3 WHERE postid = $4;', [postTitle, postPublish, postDescription, postId], (err, qres) => {
       if (err) {
@@ -120,6 +111,5 @@ router.get('/delete/:id', (req, res, next) => {
     res.redirect('/');
   }
 });
-
 
 module.exports = router;
