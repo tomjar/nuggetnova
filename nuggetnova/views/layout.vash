@@ -55,13 +55,13 @@
 <div class="clearfix"><hr /><br /></div>
   <div class="row">
     <div class="col align-self-start">
-      @html.block('right')
+      @html.block('left')
     </div>
     <div class="col col-md-6">
       @html.block('content')
     </div>
     <div class="col">
-      @html.block('left')
+      @html.block('right')
     </div>
   </div>
   <div class="clearfix"><br /><br /><br /><hr /></div>

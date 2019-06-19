@@ -12,15 +12,34 @@ router.get('/', (req, res, next) => {
     if (err) {
       return next(err)
     }
+    // var today = new Date()
+    // var priorDate = new Date().setDate(today.getDate()-30)
 
-    let data = qres.rows;
-    res.render('index', { title: 'nugget nova', isauthenticated: req.session.isauthenticated, posts: data});
+    let data = qres.rows,
+        today = new Date(),
+        priorDate = new Date().setDate(today.getDate() - 30),
+        lastThirtyDays = data.filter(item => {
+            return item.createtimestamp.getTime() >= priorDate;
+        }),
+        uniqueYears = data.map(item => {
+            return item.createtimestamp.getFullYear();
+          }).filter((item, index, arr) => {  
+            return arr.indexOf(item) === index;
+          }),
+
+        yearAndPosts = uniqueYears.map(uy => {
+          return {'year': uy, 'posts': data.filter(p => {
+              return p.createtimestamp.getFullYear() === uy;
+          })}
+        });
+        
+    res.render('index', { title: 'nugget nova', isauthenticated: req.session.isauthenticated, posts: lastThirtyDays, yearAndPosts: yearAndPosts});
   })
 });
 
 // about
 router.get('/about', (req, res, next) => {
-  res.render('about', {title: 'about'});
+  res.render('about', {title: 'about', isauthenticated: req.session.isauthenticated});
 });
 
 // logout

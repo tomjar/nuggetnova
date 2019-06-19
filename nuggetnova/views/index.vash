@@ -1,5 +1,6 @@
 @html.extend('layout', function(model) {
   @html.block('content', function(model) {
+    <h3>Recent (last 30 days)</h3>
     @model.posts.forEach(function(item){
       <div class="row rounded shadow">
         <div class="col p-3">
@@ -9,10 +10,39 @@
           <h2>@item.title</h2>
           <h5><p><i style="font-size:xx-small;">@item.createtimestamp</i></p></h5>
           <p>@item.description</p>
-          <p><a href='post/view/@item.postid'>(see full post)</a></p>
+          <p><a href='published/@item.postid'>(see full post)</a></p>
         </div>
     </div>
     <div class="clearfix"><br /> <br /> <br /></div>
     })
+  })
+  @html.block('right', function(model){
+    <h3>Archive</h3>
+     @model.yearAndPosts.forEach(function(item){
+    <div class="accordion" id="accordion-@item.year">
+      <div class="card text-white bg-dark shadow">
+        <div class="card-header" id="heading-@item.year">
+          <h2 class="mb-0">
+            <button class="btn btn-link" type="button" data-toggle="collapse" data-target='#year-@item.year' aria-expanded="true" aria-controls='@item.year'>
+              @item.year
+            </button>
+          </h2>
+        </div>
+        <div id='year-@item.year' class="collapse" aria-labelledby="heading-@item.year" data-parent="#accordion-@item.year">
+        @item.posts.forEach(function(p){
+          <div class="card-body">
+            @p.title
+            <p><a href='published/@p.postid'>(see full post)</a></p>
+          </div>
+        })
+        </div>
+      </div>
+    </div>
+    <div class="clearfix">
+    <br />
+    <br />
+    <br />
+    </div>
+     })
   })
 })

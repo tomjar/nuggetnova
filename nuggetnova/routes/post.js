@@ -64,18 +64,6 @@ router.get('/edit/:id', (req, res, next) => {
   }
 });
 
-// view
-router.get('/view/:id', (req, res, next) => {
-  let id = req.params.id;
-  db.query('SELECT * FROM pgf."Post" where postid = $1;', [id], (err, qres) => {
-    if (err) {
-      return next(err)
-    }
-    let data = qres.rows[0];
-    res.render('post/' + data.title, { title: data.title, isauthenticated: req.session.isauthenticated, post: data });
-  })
-});
-
 // update
 router.post('/update', (req, res, next) => {
   if (req.session.isauthenticated) {
