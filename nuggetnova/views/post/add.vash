@@ -1,19 +1,12 @@
 @html.extend('layout', function(model) {
   @html.block('content', function(model) {
     <h1>@model.title</h1>
-    <form method="post" action="/post/update">
-    <input id="postId" name="postId" type="hidden" value='@model.post.postid' />
+    <form method="post" action="/post/add">
         <div class="row">
     <div class="col">
         <label>title:</label>
     <br />
-    <div class="input-group mb-3">
-
-    <input type="text" class="form-control" name="postTitle" value='@model.post.title' placeholder="title" />
-  <div class="input-group-append">
-   <input type="submit" value="Save changes" class="btn btn-primary" />
-  </div>
-</div>
+    <input type="text" class="form-control" name="postTitle" value='' placeholder="title" />
     </div>
     </div>
 
@@ -24,9 +17,7 @@
     <label>description:</label>
       <textarea type="text" class="form-control" 
       name="postDescription"
-       placeholder="description">
-@model.post.description
-       </textarea>
+       placeholder="description"></textarea>
     </div>
     </div>
 
@@ -36,14 +27,10 @@
     <div class="col col-md-2">
      <label>publish post?</label>
      <br />
-    @if(model.post.publishpost){
-      <input type="checkbox" name="postPublish" checked />
-    }else{
       <input type="checkbox" name="postPublish" />
-    }
-   
     </div>
     </div>
+    <input type="submit" value="Save changes" class="btn btn-primary" />
     </form>
   })    
 })

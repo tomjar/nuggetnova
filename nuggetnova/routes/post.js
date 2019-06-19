@@ -20,6 +20,18 @@ router.get('/', (req, res, next) => {
   }
 });
 
+// view
+router.get('/view/:id', (req, res, next) => {
+  let id = req.params.id;
+  db.query('SELECT * FROM pgf."Post" where postid = $1;', [id], (err, qres) => {
+    if (err) {
+      return next(err)
+    }
+    let data = qres.rows[0];
+    res.render('published/' + data.title, { title: data.title, isauthenticated: req.session.isauthenticated, post: data });
+  })
+});
+
 // add
 router.get('/add', (req, res, next) => {
   if (req.session.isauthenticated) {
@@ -67,12 +79,11 @@ router.get('/edit/:id', (req, res, next) => {
 // update
 router.post('/update', (req, res, next) => {
   if (req.session.isauthenticated) {
-    let postTitle = req.body.postTitle,
-        postPublish = req.body.postPublish,
+    let postPublish = req.body.postPublish,
         postDescription = req.body.postDescription,
         postId = req.body.postId;
 
-    db.query('UPDATE pgf."Post" SET title=$1, modifytimestamp=now(), publishpost=$2, description=$3 WHERE postid = $4;', [postTitle, postPublish, postDescription, postId], (err, qres) => {
+    db.query('UPDATE pgf."Post" SET modifytimestamp=now(), publishpost=$1, description=$2 WHERE postid = $3;', [postPublish, postDescription, postId], (err, qres) => {
       if (err) {
         return next(err)
       }
@@ -84,11 +95,11 @@ router.post('/update', (req, res, next) => {
   }
 });
 
-// delete
+// delete/deactivate
 router.get('/delete/:id', (req, res, next) => {
   if (req.session.isauthenticated) {
     let id = req.params.id;
-    db.query('DELETE FROM pgf."Post" where postid = $1;', [id], (err, qres) => {
+    db.query('UPDATE pgf."Post" SET publishpost=false WHERE postid = $1;', [id], (err, qres) => {
       if (err) {
         return next(err)
       }

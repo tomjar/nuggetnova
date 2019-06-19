@@ -10,7 +10,7 @@
           <h2>@item.title</h2>
           <h5><p><i style="font-size:xx-small;">@item.createtimestamp</i></p></h5>
           <p>@item.description</p>
-          <p><a href='published/@item.postid'>(see full post)</a></p>
+          <p><a href='/post/view/@item.postid'>(see full post)</a></p>
         </div>
     </div>
     <div class="clearfix"><br /> <br /> <br /></div>
@@ -32,7 +32,7 @@
         @item.posts.forEach(function(p){
           <div class="card-body">
             @p.title
-            <p><a href='published/@p.postid'>(see full post)</a></p>
+            <p><a href='/post/view/@p.postid'>(see full post)</a></p>
           </div>
         })
         </div>

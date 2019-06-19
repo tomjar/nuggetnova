@@ -33,7 +33,7 @@ router.get('/', (req, res, next) => {
           })}
         });
         
-    res.render('index', { title: 'nugget nova', isauthenticated: req.session.isauthenticated, posts: lastThirtyDays, yearAndPosts: yearAndPosts});
+    res.render('index', { title: 'nuggetnova', isauthenticated: req.session.isauthenticated, posts: lastThirtyDays, yearAndPosts: yearAndPosts});
   })
 });
 
