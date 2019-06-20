@@ -8,7 +8,7 @@ const db = connection.getDataBaseConnection(app);
 // index
 router.get('/', (req, res, next) => {
   if (req.session.isauthenticated) {
-    db.query('SELECT * FROM pgf."Post";', (err, qres) => {
+    db.query('SELECT * FROM nn."Post";', (err, qres) => {
       if (err) {
         return next(err)
       }
@@ -34,7 +34,7 @@ router.get('/', (req, res, next) => {
 // view
 router.get('/view/:id', (req, res, next) => {
   let id = req.params.id;
-  db.query('SELECT postid, description, title FROM pgf."Post" where postid = $1;', [id], (err, qres) => {
+  db.query('SELECT postid, description, title FROM nn."Post" where postid = $1;', [id], (err, qres) => {
     if (err) {
       return next(err)
     }
@@ -71,7 +71,7 @@ router.get('/add', (req, res, next) => {
       postDescription = req.body.postDescription;
 
     // add more fields if needed
-    db.query('INSERT INTO pgf."Post"(postid, title, createtimestamp, modifytimestamp, publishpost,description) VALUES (uuid_generate_v1(), $1, now(), NULL, $2, $3);', [postTitle, postPublish, postDescription], (err, qres) => {
+    db.query('INSERT INTO nn."Post"(postid, title, createtimestamp, modifytimestamp, publishpost,description) VALUES (uuid_generate_v1(), $1, now(), NULL, $2, $3);', [postTitle, postPublish, postDescription], (err, qres) => {
       d
       if (err) {
         return next(err);
@@ -89,7 +89,7 @@ router.get('/add', (req, res, next) => {
 router.get('/edit/:id', (req, res, next) => {
   if (req.session.isauthenticated) {
     let id = req.params.id;
-    db.query('SELECT * FROM pgf."Post" where postid = $1;', [id], (err, qres) => {
+    db.query('SELECT * FROM nn."Post" where postid = $1;', [id], (err, qres) => {
       if (err) {
         return next(err)
       }
@@ -109,7 +109,7 @@ router.post('/update', (req, res, next) => {
       postDescription = req.body.postDescription,
       postId = req.body.postId;
 
-    db.query('UPDATE pgf."Post" SET modifytimestamp=now(), publishpost=$1, description=$2 WHERE postid = $3;', [postPublish, postDescription, postId], (err, qres) => {
+    db.query('UPDATE nn."Post" SET modifytimestamp=now(), publishpost=$1, description=$2 WHERE postid = $3;', [postPublish, postDescription, postId], (err, qres) => {
       if (err) {
         return next(err)
       }
@@ -125,7 +125,7 @@ router.post('/update', (req, res, next) => {
 router.get('/delete/:id', (req, res, next) => {
   if (req.session.isauthenticated) {
     let id = req.params.id;
-    db.query('UPDATE pgf."Post" SET publishpost=false WHERE postid = $1;', [id], (err, qres) => {
+    db.query('UPDATE nn."Post" SET publishpost=false WHERE postid = $1;', [id], (err, qres) => {
       if (err) {
         return next(err)
       }

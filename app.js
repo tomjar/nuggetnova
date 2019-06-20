@@ -19,7 +19,7 @@ var sess = {
   cookie: {}
 }
 
-if (app.get('env') === 'production') {
+if (process.env.ENVIRONMENT === 'production') {
   app.set('trust proxy', 1) // trust first proxy
   sess.cookie.secure = true // serve secure cookies
 }
@@ -37,21 +37,21 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(lessMiddleware(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'public')));
-app.use('/stylesheets', express.static(__dirname +  '/node_modules/bootstrap/dist/css'));
+app.use('/stylesheets', express.static(__dirname + '/node_modules/bootstrap/dist/css'));
 app.use('/javascripts', express.static(__dirname + '/node_modules/jquery/dist'));
 app.use('/javascripts', express.static(__dirname + '/node_modules/popper.js/dist'));
-app.use('/javascripts', express.static(__dirname +  '/node_modules/bootstrap/dist/js'));
+app.use('/javascripts', express.static(__dirname + '/node_modules/bootstrap/dist/js'));
 
 app.use('/', indexRouter);
 app.use('/post', postsRouter);
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
   next(createError(404));
 });
 
 // error handler
-app.use(function(err, req, res, next) {
+app.use(function (err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};

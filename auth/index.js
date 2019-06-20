@@ -29,7 +29,7 @@ function generateRandomSalt(length) {
  * @param {Function} callback 
  */
 function validatePassword(password, db, callback) {
-  db.query('SELECT * FROM pgf."Supersecretpassword";', [], (err, qres) => {
+  db.query('SELECT * FROM nn."Supersecretpassword";', [], (err, qres) => {
     if (err) {
       return next(err)
     }

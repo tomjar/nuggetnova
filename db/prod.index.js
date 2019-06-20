@@ -1,11 +1,8 @@
 const { Pool } = require('pg')
 
 const pool = new Pool({
-  user: 'postgres',
-  host: '127.0.0.1',
-  database: 'nuggetnova-db',
-  password: '123',
-  port: '5432'
+  connectionString: process.env.DATABASE_URL,
+  ssl: true
 });
 
 module.exports = {
