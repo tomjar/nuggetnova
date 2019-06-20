@@ -71,8 +71,7 @@ router.get('/add', (req, res, next) => {
       postDescription = req.body.postDescription;
 
     // add more fields if needed
-    db.query('INSERT INTO nn."Post"(postid, title, createtimestamp, modifytimestamp, publishpost,description) VALUES (uuid_generate_v1(), $1, now(), NULL, $2, $3);', [postTitle, postPublish, postDescription], (err, qres) => {
-      d
+    db.query('INSERT INTO nn."Post"(postid, title, createtimestamp, modifytimestamp, publishpost,description) VALUES (uuid_generate_v1(), $1, now(), now(), $2, $3);', [postTitle, postPublish, postDescription], (err, qres) => {
       if (err) {
         return next(err);
       }
