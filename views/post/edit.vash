@@ -1,0 +1,46 @@
+@html.extend('layout', function(model) {
+  @html.block('content', function(model) {
+    <h1>@model.title</h1>
+    <form method="post" action="/post/update">
+      <input id="postId" name="postId" type="hidden" value='@model.post.postid' />
+      <div class="row">
+        <div class="col">
+          <label>title:</label>
+          <br />
+          <label name="postTitle">@model.post.title</label>
+        </div>
+      </div>
+
+    <div class="clearfix"><br /></div>
+
+        <div class="row">
+    <div class="col">
+    <label>description:</label>
+      <textarea type="text" class="form-control" name="postDescription"
+       placeholder="description">@model.post.description</textarea>
+    </div>
+    </div>
+
+    <div class="clearfix"><br /></div>
+
+    <div class="row">
+      <div class="col">
+        @if(model.post.publishpost){
+          <input type="checkbox" class="form-check-input" name="postPublish" checked />
+        }else{
+          <input type="checkbox" class="form-check-input" name="postPublish" />
+        }
+        <label class="form-check-label" for="postPublish">publish post?</label>
+      </div>
+    </div>
+
+    <div class="clearfix"><br /></div>
+
+    <div class="row">
+      <div class="col">
+        <input type="submit" value="Save changes" class="btn btn-primary" />
+      </div>
+    </div>
+    </form>
+  })    
+})
