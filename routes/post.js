@@ -17,7 +17,7 @@ router.get('/', (req, res, next) => {
           return {
             'postid': d.postid,
             'publishpost': d.publishpost ? 'Yes' : 'No',
-            'modifytimestamp': d.modifytimestamp.toLocaleString('en-US', { timeZone: 'UTC' }),
+            'modifytimestamp': d.modifytimestamp ? d.modifytimestamp.toLocaleString('en-US', { timeZone: 'UTC' }) : '',
             'createtimestamp': d.createtimestamp.toLocaleString('en-US', { timeZone: 'UTC' }),
             'title': d.title
           }
@@ -71,7 +71,7 @@ router.get('/add', (req, res, next) => {
       postDescription = req.body.postDescription;
 
     // add more fields if needed
-    db.query('INSERT INTO nn."Post"(postid, title, createtimestamp, modifytimestamp, publishpost,description) VALUES (uuid_generate_v1(), $1, now(), now(), $2, $3);', [postTitle, postPublish, postDescription], (err, qres) => {
+    db.query('INSERT INTO nn."Post"(postid, title, createtimestamp, modifytimestamp, publishpost,description) VALUES (uuid_generate_v1(), $1, now(), NULL, $2, $3);', [postTitle, postPublish, postDescription], (err, qres) => {
       if (err) {
         return next(err);
       }
