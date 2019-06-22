@@ -1,14 +1,67 @@
 var express = require('express');
 var router = express.Router();
-var app = express();
 var auth = require('../auth/index.js');
 var connection = require('../db/connection.js');
 
 const db = connection.getDataBaseConnection();
 
+// archive
+router.get('/archive', (req, res, next) => {
+  db.query('SELECT id, header, createtimestamp, modifytimestamp, ispublished, description, name FROM nn."Post" WHERE ispublished = true ORDER BY createtimestamp DESC;',
+    [], (err, qres) => {
+      if (err) {
+        return next(err)
+      }
+
+      let data = qres.rows,
+        uniqueYears = data.map(item => {
+          return item.createtimestamp.getFullYear();
+        }).filter((item, index, arr) => {
+          return arr.indexOf(item) === index;
+        }),
+
+        yearAndPosts = uniqueYears.map(uy => {
+          return {
+            'year': uy, 'posts': data.filter(p => {
+              return p.createtimestamp.getFullYear() === uy;
+            })
+          }
+        });
+
+      res.render('archive', {
+        title: 'Archive',
+        isauthenticated: req.session.isauthenticated,
+        yearAndPosts: yearAndPosts
+      });
+    })
+});
+
+// salts
+router.get('/salts', (req, res, next) => {
+  let salts = [
+    auth.generateRandomSalt(100),
+    auth.generateRandomSalt(100),
+    auth.generateRandomSalt(100),
+    auth.generateRandomSalt(100),
+    auth.generateRandomSalt(100),
+    auth.generateRandomSalt(100),
+    auth.generateRandomSalt(100),
+    auth.generateRandomSalt(100),
+    auth.generateRandomSalt(100),
+    auth.generateRandomSalt(100),
+    auth.generateRandomSalt(100),
+    auth.generateRandomSalt(100)];
+
+  res.render('salts', {
+    title: 'random salts',
+    isauthenticated: req.session.isauthenticated,
+    salts: salts
+  })
+})
+
 // home
 router.get('/', (req, res, next) => {
-  db.query('SELECT * FROM nn."Post" WHERE publishpost = true ORDER BY createtimestamp DESC;', (err, qres) => {
+  db.query('SELECT id, header, createtimestamp, modifytimestamp, ispublished, description, name FROM nn."Post" WHERE ispublished = true ORDER BY createtimestamp DESC;', (err, qres) => {
     if (err) {
       return next(err)
     }
@@ -16,28 +69,24 @@ router.get('/', (req, res, next) => {
     let data = qres.rows,
       today = new Date(),
       priorDate = new Date().setDate(today.getDate() - 30),
+
       lastThirtyDays = data.filter(item => {
         return item.createtimestamp.getTime() >= priorDate;
-      }),
-      uniqueYears = data.map(item => {
-        return item.createtimestamp.getFullYear();
-      }).filter((item, index, arr) => {
-        return arr.indexOf(item) === index;
-      }),
-
-      yearAndPosts = uniqueYears.map(uy => {
+      }).map(item => {
         return {
-          'year': uy, 'posts': data.filter(p => {
-            return p.createtimestamp.getFullYear() === uy;
-          })
+          'id': item.id,
+          'header': item.header,
+          'createtimestamp': item.createtimestamp.toLocaleString('en-US', { timeZone: 'UTC' }),
+          'modifytimestamp': item.modifytimestamp ? item.modifytimestamp.toLocaleString('en-US', { timeZone: 'UTC' }) : '',
+          'description': item.description,
+          'name': item.name
         }
       });
 
     res.render('index', {
-      title: 'nuggetnova',
+      title: 'recent (last 30 days)',
       isauthenticated: req.session.isauthenticated,
-      posts: lastThirtyDays,
-      yearAndPosts: yearAndPosts
+      posts: lastThirtyDays
     });
   })
 });

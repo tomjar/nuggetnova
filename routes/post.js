@@ -8,50 +8,26 @@ const db = connection.getDataBaseConnection(app);
 // index
 router.get('/', (req, res, next) => {
   if (req.session.isauthenticated) {
-    db.query('SELECT * FROM nn."Post";', (err, qres) => {
+    db.query('SELECT id, ispublished, modifytimestamp, createtimestamp, header FROM nn."Post";', (err, qres) => {
       if (err) {
         return next(err)
       }
       let data = qres.rows,
         viewmodel = data.map(d => {
           return {
-            'postid': d.postid,
-            'publishpost': d.publishpost ? 'Yes' : 'No',
+            'id': d.id,
+            'ispublished': d.ispublished ? 'Yes' : 'No',
             'modifytimestamp': d.modifytimestamp ? d.modifytimestamp.toLocaleString('en-US', { timeZone: 'UTC' }) : '',
             'createtimestamp': d.createtimestamp.toLocaleString('en-US', { timeZone: 'UTC' }),
-            'title': d.title
+            'header': d.header
           }
         });
-
 
       res.render('post/index', { title: 'all posts', isauthenticated: req.session.isauthenticated, posts: viewmodel });
     })
   } else {
     res.redirect('/');
   }
-});
-
-// view
-router.get('/view/:id', (req, res, next) => {
-  let id = req.params.id;
-  db.query('SELECT postid, description, title FROM nn."Post" where postid = $1;', [id], (err, qres) => {
-    if (err) {
-      return next(err)
-    }
-    let data = qres.rows,
-      viewmodel = data.map(d => {
-        return {
-          'postid': d.postid,
-          'description': d.description,
-          'title': d.title
-        }
-      })[0];
-    res.render('published/' + viewmodel.title, {
-      title: viewmodel.title,
-      isauthenticated: req.session.isauthenticated,
-      post: viewmodel
-    });
-  })
 });
 
 // add
@@ -66,18 +42,19 @@ router.get('/add', (req, res, next) => {
   }
 }).post('/add', (req, res, next) => {
   if (req.session.isauthenticated) {
-    let postTitle = req.body.postTitle,
-      postPublish = req.body.postPublish,
-      postDescription = req.body.postDescription;
+    let postHeader = req.body.postHeader,
+      postIsPublished = req.body.postIsPublished,
+      postDescription = req.body.postDescription,
+      postName = req.body.postName;
 
-    // add more fields if needed
-    db.query('INSERT INTO nn."Post"(postid, title, createtimestamp, modifytimestamp, publishpost,description) VALUES (uuid_generate_v1(), $1, now(), NULL, $2, $3);', [postTitle, postPublish, postDescription], (err, qres) => {
-      if (err) {
-        return next(err);
-      }
+    db.query('INSERT INTO nn."Post"(id, header, createtimestamp, modifytimestamp, ispublished, description, name) '
+      + 'VALUES (uuid_generate_v1(), $1, now(), NULL, $2, $3, $4);', [postHeader, postIsPublished, postDescription, postName], (err, qres) => {
+        if (err) {
+          return next(err);
+        }
 
-      res.redirect('/post');
-    })
+        res.redirect('/post');
+      })
 
   } else {
     res.redirect('/');
@@ -88,12 +65,13 @@ router.get('/add', (req, res, next) => {
 router.get('/edit/:id', (req, res, next) => {
   if (req.session.isauthenticated) {
     let id = req.params.id;
-    db.query('SELECT * FROM nn."Post" where postid = $1;', [id], (err, qres) => {
+
+    db.query('SELECT id, header, ispublished, description, name FROM nn."Post" where id = $1;', [id], (err, qres) => {
       if (err) {
         return next(err)
       }
       let data = qres.rows[0];
-      res.render('post/edit', { title: data.title, isauthenticated: req.session.isauthenticated, post: data });
+      res.render('post/edit', { title: data.header, isauthenticated: req.session.isauthenticated, post: data });
     })
 
   } else {
@@ -104,27 +82,45 @@ router.get('/edit/:id', (req, res, next) => {
 // update
 router.post('/update', (req, res, next) => {
   if (req.session.isauthenticated) {
-    let postPublish = req.body.postPublish,
+    let postHeader = req.body.postHeader,
+      postIsPublished = req.body.postIsPublished,
       postDescription = req.body.postDescription,
       postId = req.body.postId;
 
-    db.query('UPDATE nn."Post" SET modifytimestamp=now(), publishpost=$1, description=$2 WHERE postid = $3;', [postPublish, postDescription, postId], (err, qres) => {
-      if (err) {
-        return next(err)
-      }
+    db.query('UPDATE nn."Post" SET header=$1, modifytimestamp=now(), ispublished=$2, description=$3 WHERE id = $4;',
+      [postHeader, postIsPublished, postDescription, postId], (err, qres) => {
+        if (err) {
+          return next(err)
+        }
 
-      res.redirect('/post');
-    })
+        res.redirect('/post');
+      })
   } else {
     res.redirect('/');
   }
 });
 
-// delete/deactivate
+// delete
 router.get('/delete/:id', (req, res, next) => {
   if (req.session.isauthenticated) {
     let id = req.params.id;
-    db.query('UPDATE nn."Post" SET publishpost=false WHERE postid = $1;', [id], (err, qres) => {
+    db.query('DELETE FROM nn."Post" WHERE id = $1;', [id], (err, qres) => {
+      if (err) {
+        return next(err)
+      }
+      res.redirect('/post');
+    })
+
+  } else {
+    res.redirect('/');
+  }
+});
+
+// deactivate
+router.get('/deactivate/:id', (req, res, next) => {
+  if (req.session.isauthenticated) {
+    let id = req.params.id;
+    db.query('UPDATE nn."Post" SET ispublished=false WHERE id = $1;', [id], (err, qres) => {
       if (err) {
         return next(err)
       }

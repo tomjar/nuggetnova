@@ -1,0 +1,15 @@
+/* set the fixed height of the footer here */
+footer {
+    height: 120px;
+    border-top-width: 1px;
+    margin-top:50px;
+    z-index:100;
+  }
+
+  body{
+      background-color: #626363;
+  }
+
+  .container{
+      background-color: #ffff;
+  }

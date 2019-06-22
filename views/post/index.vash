@@ -1,20 +1,20 @@
 @html.extend('layout', function(model) {
   @html.block('content', function(model) {
     <h1>@model.title</h1>
-        <table class="table text-white bg-dark">
+        <table class="table">
       <tr>
-        <th>title</th>
+        <th>header</th>
         <th>create timestamp</th>
         <th>modify timestamp</th>
-        <th>published?</th>
+        <th>is published?</th>
         <th></th>
       </tr>
     @model.posts.forEach(function(item){
       <tr>
-	      <td>@item.title</td>
+	      <td>@item.header</td>
         <td>@item.createtimestamp</td>
         <td>@item.modifytimestamp</td>
-        <td>@item.publishpost</td>
+        <td>@item.ispublished</td>
         <td>
           <div class="dropdown">
             <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" 
@@ -22,8 +22,9 @@
               Actions
             </button>
             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-              <a class="btn btn-default dropdown-item" href='/post/edit/@item.postid'>edit</a>
-              <a class="btn btn-danger dropdown-item" href='/post/delete/@item.postid'>delete</a>
+              <a class="btn btn-default dropdown-item" href='/post/edit/@item.id'>edit</a>
+              <a class="btn btn-default dropdown-item" href='/post/deactivate/@item.id'>deactivate</a>
+              <a class="btn btn-danger dropdown-item" href='/post/delete/@item.id'>delete</a>
             </div>
           </div>
         </td>
