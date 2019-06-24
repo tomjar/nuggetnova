@@ -7,6 +7,7 @@
         <th>create timestamp</th>
         <th>modify timestamp</th>
         <th>is published?</th>
+        <th>category</th>
         <th></th>
       </tr>
     @model.posts.forEach(function(item){
@@ -15,6 +16,7 @@
         <td>@item.createtimestamp</td>
         <td>@item.modifytimestamp</td>
         <td>@item.ispublished</td>
+        <td>@item.category</td>
         <td>
           <div class="dropdown">
             <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" 
@@ -23,7 +25,11 @@
             </button>
             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
               <a class="btn btn-default dropdown-item" href='/post/edit/@item.id'>edit</a>
-              <a class="btn btn-default dropdown-item" href='/post/deactivate/@item.id'>deactivate</a>
+              @if (item.ispublished === 'true'){
+                <a class="btn btn-default dropdown-item" href='/post/deactivate/@item.id'>deactivate</a>
+              }else{
+                <a class="btn btn-default dropdown-item" href='/post/activate/@item.id'>activate</a>
+              }
               <a class="btn btn-danger dropdown-item" href='/post/delete/@item.id'>delete</a>
             </div>
           </div>

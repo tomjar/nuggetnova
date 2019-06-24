@@ -61,7 +61,7 @@ router.get('/salts', (req, res, next) => {
 
 // home
 router.get('/', (req, res, next) => {
-  db.query('SELECT id, header, createtimestamp, modifytimestamp, ispublished, description, name FROM nn."Post" WHERE ispublished = true ORDER BY createtimestamp DESC;', (err, qres) => {
+  db.query('SELECT id, header, createtimestamp, modifytimestamp, ispublished, description, name, category FROM nn."Post" WHERE ispublished = true ORDER BY createtimestamp DESC;', (err, qres) => {
     if (err) {
       return next(err)
     }
@@ -79,7 +79,9 @@ router.get('/', (req, res, next) => {
           'createtimestamp': item.createtimestamp.toLocaleString('en-US', { timeZone: 'UTC' }),
           'modifytimestamp': item.modifytimestamp ? item.modifytimestamp.toLocaleString('en-US', { timeZone: 'UTC' }) : '',
           'description': item.description,
-          'name': item.name
+          'name': item.name,
+          'categoryImg': `/images/categories/${item.category}.png`,
+          'category': item.category
         }
       });
 

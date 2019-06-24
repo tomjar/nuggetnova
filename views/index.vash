@@ -1,17 +1,23 @@
 @html.extend('layout', function(model) {
   @html.block('content', function(model) {
     <h1>@model.title</h1>
-    @model.posts.forEach(function(item){
-      <div class="card" style="width: 12rem;">
-      <img class="rounded" src="/images/categories/life.png" alt="life" />
-  <div class="card-body">
-    <h3 class="card-title">@item.header</h3>
-    <p class="card-text">@item.description</p>
-    <a href='/p/@item.name'>(see full post)</a>
-    <br />
-    <i style="font-size:xx-small;">@item.createtimestamp</i>
-  </div>
-</div>
-    })
+
+    <div class="d-flex flex-wrap flex-row bd-highlight mb-3">
+      @model.posts.forEach(function(item){
+          <div class="p-2 bd-highlight">
+          <div class="card">
+            <a href="/p/@item.name">
+              <img class="rounded" src="@item.categoryImg" alt="@item.category" />
+            </a>
+            <div class="card-body">
+              <h3 class="card-title">@item.header</h3>
+              <p class="card-text">@item.description</p>
+              <p><a href="/p/@item.name">(see full post)</a></p>
+              <i style="font-size:xx-small;">@item.createtimestamp</i>
+            </div>
+        </div>
+      </div>
+      })
+      </div>
   })
 })

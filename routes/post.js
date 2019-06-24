@@ -8,7 +8,7 @@ const db = connection.getDataBaseConnection(app);
 // index
 router.get('/', (req, res, next) => {
   if (req.session.isauthenticated) {
-    db.query('SELECT id, ispublished, modifytimestamp, createtimestamp, header FROM nn."Post";', (err, qres) => {
+    db.query('SELECT id, ispublished, modifytimestamp, createtimestamp, header, category FROM nn."Post";', (err, qres) => {
       if (err) {
         return next(err)
       }
@@ -19,7 +19,8 @@ router.get('/', (req, res, next) => {
             'ispublished': d.ispublished ? 'Yes' : 'No',
             'modifytimestamp': d.modifytimestamp ? d.modifytimestamp.toLocaleString('en-US', { timeZone: 'UTC' }) : '',
             'createtimestamp': d.createtimestamp.toLocaleString('en-US', { timeZone: 'UTC' }),
-            'header': d.header
+            'header': d.header,
+            'category': d.category
           }
         });
 
@@ -34,8 +35,16 @@ router.get('/', (req, res, next) => {
 router.get('/add', (req, res, next) => {
   if (req.session.isauthenticated) {
     res.render('post/add', {
-      title: 'add new post',
-      isauthenticated: req.session.isauthenticated
+      'title': 'add new post',
+      'isauthenticated': req.session.isauthenticated,
+      'categories': [
+        { 'value': 'bicycle', 'name': 'bicycle' },
+        { 'value': 'code', 'name': 'code' },
+        { 'value': 'gaming', 'name': 'gaming' },
+        { 'value': 'hardware', 'name': 'hardware' },
+        { 'value': 'life', 'name': 'life' },
+        { 'value': 'review', 'name': 'review' }
+      ]
     });
   } else {
     res.redirect('/');
@@ -45,10 +54,12 @@ router.get('/add', (req, res, next) => {
     let postHeader = req.body.postHeader,
       postIsPublished = req.body.postIsPublished,
       postDescription = req.body.postDescription,
-      postName = req.body.postName;
+      postName = req.body.postName,
+      postCategory = req.body.postCategory;
 
-    db.query('INSERT INTO nn."Post"(id, header, createtimestamp, modifytimestamp, ispublished, description, name) '
-      + 'VALUES (uuid_generate_v1(), $1, now(), NULL, $2, $3, $4);', [postHeader, postIsPublished, postDescription, postName], (err, qres) => {
+    db.query('INSERT INTO nn."Post"(id, header, createtimestamp, modifytimestamp, ispublished, description, name, category) '
+      + 'VALUES (uuid_generate_v1(), $1, now(), NULL, $2, $3, $4, $5);',
+      [postHeader, postIsPublished, postDescription, postName, postCategory], (err, qres) => {
         if (err) {
           return next(err);
         }
@@ -61,34 +72,57 @@ router.get('/add', (req, res, next) => {
   }
 });
 
-// edit
+// edit/update
 router.get('/edit/:id', (req, res, next) => {
   if (req.session.isauthenticated) {
     let id = req.params.id;
 
-    db.query('SELECT id, header, ispublished, description, name FROM nn."Post" where id = $1;', [id], (err, qres) => {
+    db.query('SELECT id, header, ispublished, description, name, category FROM nn."Post" where id = $1;', [id], (err, qres) => {
       if (err) {
-        return next(err)
+        return next(err);
       }
-      let data = qres.rows[0];
-      res.render('post/edit', { title: data.header, isauthenticated: req.session.isauthenticated, post: data });
+
+      let data = qres.rows;
+
+      if (data.length <= 0) {
+        return next('Nothing found');
+      }
+
+      let viewmodel = data.map(d => {
+        return {
+          'id': d.id,
+          'header': d.header,
+          'ispublished': d.ispublished,
+          'description': d.description,
+          'name': d.name,
+          'category': d.category,
+          'categories': [
+            { 'value': 'bicycle', 'name': 'bicycle' },
+            { 'value': 'code', 'name': 'code' },
+            { 'value': 'gaming', 'name': 'gaming' },
+            { 'value': 'hardware', 'name': 'hardware' },
+            { 'value': 'life', 'name': 'life' },
+            { 'value': 'review', 'name': 'review' }
+          ]
+        }
+      })[0];
+
+      res.render('post/edit', { title: data.header, isauthenticated: req.session.isauthenticated, post: viewmodel });
     })
 
   } else {
     res.redirect('/');
   }
-});
-
-// update
-router.post('/update', (req, res, next) => {
+}).post('/update', (req, res, next) => {
   if (req.session.isauthenticated) {
     let postHeader = req.body.postHeader,
       postIsPublished = req.body.postIsPublished,
       postDescription = req.body.postDescription,
-      postId = req.body.postId;
+      postId = req.body.postId,
+      postCategory = req.body.postCategory;
 
-    db.query('UPDATE nn."Post" SET header=$1, modifytimestamp=now(), ispublished=$2, description=$3 WHERE id = $4;',
-      [postHeader, postIsPublished, postDescription, postId], (err, qres) => {
+    db.query('UPDATE nn."Post" SET category=$1, header=$2, modifytimestamp=now(), ispublished=$3, description=$4 WHERE id = $5;',
+      [postCategory, postHeader, postIsPublished, postDescription, postId], (err, qres) => {
         if (err) {
           return next(err)
         }
@@ -105,6 +139,22 @@ router.get('/delete/:id', (req, res, next) => {
   if (req.session.isauthenticated) {
     let id = req.params.id;
     db.query('DELETE FROM nn."Post" WHERE id = $1;', [id], (err, qres) => {
+      if (err) {
+        return next(err)
+      }
+      res.redirect('/post');
+    })
+
+  } else {
+    res.redirect('/');
+  }
+});
+
+// activate
+router.get('/activate/:id', (req, res, next) => {
+  if (req.session.isauthenticated) {
+    let id = req.params.id;
+    db.query('UPDATE nn."Post" SET ispublished=true WHERE id = $1;', [id], (err, qres) => {
       if (err) {
         return next(err)
       }
