@@ -53,7 +53,6 @@ router.get('/add', (req, res, next) => {
 }).post('/add', (req, res, next) => {
   if (req.session.isauthenticated) {
     let postHeader = req.body.postHeader,
-      postIsPublished = req.body.postIsPublished,
       postDescription = req.body.postDescription,
       postName = req.body.postName,
       postCategory = req.body.postCategory,
@@ -66,8 +65,8 @@ router.get('/add', (req, res, next) => {
       }
 
       db.query('INSERT INTO nn."Post"(id, header, createtimestamp, modifytimestamp, ispublished, description, name, category) '
-        + 'VALUES (uuid_generate_v1(), $1, now(), NULL, $2, $3, $4, $5);',
-        [postHeader, postIsPublished, postDescription, postName, postCategory], (err, qres) => {
+        + 'VALUES (uuid_generate_v1(), $1, now(), NULL, false, $2, $3, $4);',
+        [postHeader, postDescription, postName, postCategory], (err, qres) => {
           if (err) {
             return next(err);
           }
@@ -98,28 +97,35 @@ router.get('/edit/:id', (req, res, next) => {
         return next('Nothing found');
       }
 
-      let viewmodel = data.map(d => {
-        return {
-          'id': d.id,
-          'header': d.header,
-          'ispublished': d.ispublished,
-          'description': d.description,
-          'name': d.name,
-          'category': d.category,
-          'categories': [
-            { 'value': 'bicycle', 'name': 'bicycle' },
-            { 'value': 'code', 'name': 'code' },
-            { 'value': 'gaming', 'name': 'gaming' },
-            { 'value': 'hardware', 'name': 'hardware' },
-            { 'value': 'life', 'name': 'life' },
-            { 'value': 'review', 'name': 'review' }
-          ]
+      filesys.readFile(`views/p/${data[0].name}.vash`, (err, content) => {
+        if (err) {
+          return next(err);
         }
-      })[0];
 
-      res.render('post/edit', { title: data.header, isauthenticated: req.session.isauthenticated, post: viewmodel });
+        let viewmodel = data.map(d => {
+          return {
+            'id': d.id,
+            'header': d.header,
+            'ispublished': d.ispublished,
+            'description': d.description,
+            'name': d.name,
+            'category': d.category,
+            'content': content,
+            'categories': [
+              { 'value': 'bicycle', 'name': 'bicycle' },
+              { 'value': 'code', 'name': 'code' },
+              { 'value': 'gaming', 'name': 'gaming' },
+              { 'value': 'hardware', 'name': 'hardware' },
+              { 'value': 'life', 'name': 'life' },
+              { 'value': 'review', 'name': 'review' }
+            ]
+          }
+        })[0];
+
+        res.render('post/edit', { title: data.header, isauthenticated: req.session.isauthenticated, post: viewmodel });
+
+      });
     })
-
   } else {
     res.redirect('/');
   }
@@ -142,23 +148,31 @@ router.get('/edit/:id', (req, res, next) => {
   } else {
     res.redirect('/');
   }
-});
-
-// delete
-router.get('/delete/:id', (req, res, next) => {
+}).post('/write', (req, res, next) => {
   if (req.session.isauthenticated) {
-    let id = req.params.id;
-    db.query('DELETE FROM nn."Post" WHERE id = $1;', [id], (err, qres) => {
+    let postId = req.body.postId,
+      content = req.body.postContent,
+      name = req.body.postName,
+      filePath = `views/p/${name}.vash`;
+
+    const bufferData = new Uint8Array(Buffer.from(content));
+
+    filesys.writeFile(filePath, bufferData, (err) => {
       if (err) {
         return next(err)
       }
-      res.redirect('/post');
-    })
 
-  } else {
-    res.redirect('/');
+      db.query('UPDATE nn."Post" SET modifytimestamp=now() WHERE id = $1;',
+        [postId], (err, qres) => {
+          if (err) {
+            return next(err)
+          }
+
+          res.redirect('/post');
+        })
+    });
   }
-});
+})
 
 // activate
 router.get('/activate/:id', (req, res, next) => {

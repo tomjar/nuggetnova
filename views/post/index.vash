@@ -30,7 +30,6 @@
               }else{
                 <a class="btn btn-default dropdown-item" href='/post/activate/@item.id'>activate</a>
               }
-              <a class="btn btn-danger dropdown-item" href='/post/delete/@item.id'>delete</a>
             </div>
           </div>
         </td>

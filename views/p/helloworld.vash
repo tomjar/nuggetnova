@@ -2,5 +2,6 @@
   @html.block('content', function(model) {
     <h1>@model.title</h1>
     <p>Hello and welcome to my blog. This is my first post.</p>
+<p>Write me to the file bob!</p>
   })
 })
