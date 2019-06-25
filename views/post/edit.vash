@@ -60,7 +60,7 @@
       <div class="row">
         <div class="col">
           <label>content:</label>
-          <textarea type="text" class="form-control" name="postContent" rows="25" placeholder="content">@model.post.content</textarea>
+          <textarea type="text" class="form-control trumbowyg" name="postContent" rows="25" placeholder="content">@model.post.content</textarea>
         </div>
       </div>
 
@@ -74,5 +74,15 @@
         </div>
       </div>
     </form>
+
+    <script>
+    // A $( document ).ready() block.
+    $( document ).ready(function() {
+      $('.trumbowyg').trumbowyg({
+        tagsToRemove: ['script']
+      });
+    });
+
+    </script>
   })    
 })

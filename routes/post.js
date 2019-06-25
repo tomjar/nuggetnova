@@ -57,9 +57,16 @@ router.get('/add', (req, res, next) => {
       postName = req.body.postName,
       postCategory = req.body.postCategory,
       filePath = `views/p/${postName}.vash`,
-      fileContent = "";
+      baseContent = `@html.extend('layout', function(model) {
+        @html.block('content', function(model) {
+          <h1>@model.title</h1>
+          <p>PLACE YOUR CONTENT HERE!</p>
+        })
+      })`;
 
-    filesys.writeFile(filePath, fileContent, (err) => {
+    const bufferData = new Uint8Array(Buffer.from(baseContent));
+
+    filesys.writeFile(filePath, bufferData, (err) => {
       if (err) {
         return next(err);
       }
@@ -178,7 +185,7 @@ router.get('/edit/:id', (req, res, next) => {
 router.get('/activate/:id', (req, res, next) => {
   if (req.session.isauthenticated) {
     let id = req.params.id;
-    db.query('UPDATE nn."Post" SET ispublished=true WHERE id = $1;', [id], (err, qres) => {
+    db.query('UPDATE nn."Post" SET ispublished=true, modifytimestamp=now() WHERE id = $1;', [id], (err, qres) => {
       if (err) {
         return next(err)
       }
@@ -194,7 +201,7 @@ router.get('/activate/:id', (req, res, next) => {
 router.get('/deactivate/:id', (req, res, next) => {
   if (req.session.isauthenticated) {
     let id = req.params.id;
-    db.query('UPDATE nn."Post" SET ispublished=false WHERE id = $1;', [id], (err, qres) => {
+    db.query('UPDATE nn."Post" SET ispublished=false, modifytimestamp=now() WHERE id = $1;', [id], (err, qres) => {
       if (err) {
         return next(err)
       }

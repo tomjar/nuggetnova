@@ -1,0 +1,14 @@
+@html.extend('layout', function(model) {
+        @html.block('content', function(model) {
+          <h1>@model.title</h1>
+          <p>Hello, this blogging thing might be taking off.</p>
+<pre>
+<code> 
+if(true){
+ // do the thing!
+}
+
+</code>
+</pre>
+        })
+      })

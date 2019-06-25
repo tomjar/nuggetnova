@@ -38,31 +38,33 @@ router.get('/archive', (req, res, next) => {
 
 // salts
 router.get('/salts', (req, res, next) => {
-  let salts = [
-    auth.generateRandomSalt(100),
-    auth.generateRandomSalt(100),
-    auth.generateRandomSalt(100),
-    auth.generateRandomSalt(100),
-    auth.generateRandomSalt(100),
-    auth.generateRandomSalt(100),
-    auth.generateRandomSalt(100),
-    auth.generateRandomSalt(100),
-    auth.generateRandomSalt(100),
-    auth.generateRandomSalt(100),
-    auth.generateRandomSalt(100),
-    auth.generateRandomSalt(100)];
+  if (req.session.isauthenticated) {
+    let salts = [
+      auth.generateRandomSalt(100),
+      auth.generateRandomSalt(100),
+      auth.generateRandomSalt(100),
+      auth.generateRandomSalt(100),
+      auth.generateRandomSalt(100),
+      auth.generateRandomSalt(100),
+      auth.generateRandomSalt(100),
+      auth.generateRandomSalt(100),
+      auth.generateRandomSalt(100),
+      auth.generateRandomSalt(100),
+      auth.generateRandomSalt(100),
+      auth.generateRandomSalt(100)];
 
-  res.render('salts', {
-    title: 'random salts',
-    isauthenticated: req.session.isauthenticated,
-    salts: salts
-  })
+    res.render('salts', {
+      title: 'random salts',
+      isauthenticated: req.session.isauthenticated,
+      salts: salts
+    })
+  } else {
+    res.redirect('/');
+  }
 })
 
 // home
 router.get('/', (req, res, next) => {
-
-
 
   db.query('SELECT id, header, createtimestamp, modifytimestamp, ispublished, description, name, category FROM nn."Post" WHERE ispublished = true ORDER BY createtimestamp DESC;', (err, qres) => {
     if (err) {
