@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var app = express();
 var connection = require('../db/connection.js');
+var filesys = require('fs');
 
 const db = connection.getDataBaseConnection(app);
 
@@ -55,17 +56,26 @@ router.get('/add', (req, res, next) => {
       postIsPublished = req.body.postIsPublished,
       postDescription = req.body.postDescription,
       postName = req.body.postName,
-      postCategory = req.body.postCategory;
+      postCategory = req.body.postCategory,
+      filePath = `views/p/${postName}.vash`,
+      fileContent = "";
 
-    db.query('INSERT INTO nn."Post"(id, header, createtimestamp, modifytimestamp, ispublished, description, name, category) '
-      + 'VALUES (uuid_generate_v1(), $1, now(), NULL, $2, $3, $4, $5);',
-      [postHeader, postIsPublished, postDescription, postName, postCategory], (err, qres) => {
-        if (err) {
-          return next(err);
-        }
+    filesys.writeFile(filePath, fileContent, (err) => {
+      if (err) {
+        return next(err);
+      }
 
-        res.redirect('/post');
-      })
+      db.query('INSERT INTO nn."Post"(id, header, createtimestamp, modifytimestamp, ispublished, description, name, category) '
+        + 'VALUES (uuid_generate_v1(), $1, now(), NULL, $2, $3, $4, $5);',
+        [postHeader, postIsPublished, postDescription, postName, postCategory], (err, qres) => {
+          if (err) {
+            return next(err);
+          }
+
+          res.redirect('/post');
+        })
+
+    });
 
   } else {
     res.redirect('/');

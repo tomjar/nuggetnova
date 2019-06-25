@@ -24,9 +24,9 @@ function generateRandomSalt(length) {
 
 /**
  * @description validates the super secret password
- * @param {String} password 
+ * @param {String} password the attempted password
  * @param {Object} db 
- * @param {Function} callback 
+ * @param {Function} callback a function to be called after validation
  */
 function validatePassword(password, db, callback) {
   db.query('SELECT * FROM nn."Supersecretpassword";', [], (err, qres) => {
@@ -39,6 +39,7 @@ function validatePassword(password, db, callback) {
       supersecretpassword = data.key,
       tempsupersecretpassword = hashPassword(password, salt),
       valid = supersecretpassword === tempsupersecretpassword;
+
     callback(valid);
   })
 }

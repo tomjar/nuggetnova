@@ -3,7 +3,7 @@
 <h1>@model.title</h1>
 <div class="row">
     <div class="col p-3">
-      <img src="/images/profilepic_updated.JPG" alt="thomas reese" height="200px" />
+      <img src="/images/profilepic_updated.JPG" alt="thomas reese" height="120px" />
     </div>
     <div class="col p-3">
       <p>

@@ -61,6 +61,9 @@ router.get('/salts', (req, res, next) => {
 
 // home
 router.get('/', (req, res, next) => {
+
+
+
   db.query('SELECT id, header, createtimestamp, modifytimestamp, ispublished, description, name, category FROM nn."Post" WHERE ispublished = true ORDER BY createtimestamp DESC;', (err, qres) => {
     if (err) {
       return next(err)
@@ -69,7 +72,6 @@ router.get('/', (req, res, next) => {
     let data = qres.rows,
       today = new Date(),
       priorDate = new Date().setDate(today.getDate() - 30),
-
       lastThirtyDays = data.filter(item => {
         return item.createtimestamp.getTime() >= priorDate;
       }).map(item => {
