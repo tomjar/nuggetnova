@@ -1,11 +1,12 @@
 @html.extend('layout', function(model) {
   @html.block('content', function(model) {
-<h1>@model.title</h1>
-<div class="row">
-    <div class="col p-3">
-      <img src="/images/profilepic_updated.JPG" alt="thomas reese" height="120px" />
-    </div>
-    <div class="col p-3">
+    <h1>@model.title</h1>
+
+    <div>
+      <p>
+        <img src="/images/profilepic_updated.JPG" alt="thomas reese" height="110px" />
+      </p>
+      
       <p>
         Hello my name is Thomas Reese and welcome. The purpose of this website to share things on my mind, talk a little bit about myself, 
         and express my opinion on the world. This website you are viewing was built with 
@@ -14,14 +15,16 @@
         and the <a href="https://github.com/kirbysayshi/vash" target="_blank">vash template engine</a>. 
         The source code for this website can be found <a href="https://github.com/tomjar/nuggetnova" target="_blank">here</a>.
       </p>
+
       <p>
         <a href="https://github.com/tomjar" target="_blank">github</a> 
         <a href="https://linkedin.com/in/tom-reese-b47049157" target="_blank">linkedin</a>
         <a href="https://www.strava.com/athletes/24684389" target="_blank">strava</a>
       </p>
     </div>
-    <div class="col">
-    </div>
-</div>
+
+    @html.block('archive', function(model){
+      @html.include('archive', model)
+    })
   })
 })

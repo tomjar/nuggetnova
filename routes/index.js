@@ -48,10 +48,10 @@ router.get('/', (req, res, next) => {
       }
 
       res.render('index', {
-        title: 'recent',
-        isauthenticated: req.session.isauthenticated,
-        posts: lastThirtyDays,
-        yearAndPosts: yearAndPosts
+        'title': 'recent',
+        'isauthenticated': req.session.isauthenticated,
+        'posts': lastThirtyDays,
+        'yearAndPosts': yearAndPosts
       });
     })
   })
@@ -59,10 +59,18 @@ router.get('/', (req, res, next) => {
 
 // about
 router.get('/about', (req, res, next) => {
-  res.render('about', {
-    title: 'about',
-    isauthenticated: req.session.isauthenticated
-  });
+  pd.getAllArchived(function (err, yearAndPosts) {
+
+    if (err) {
+      return next(err);
+    }
+    res.render('about', {
+      'title': 'about',
+      'isauthenticated': req.session.isauthenticated,
+      'yearAndPosts': yearAndPosts
+    });
+
+  })
 });
 
 // logout

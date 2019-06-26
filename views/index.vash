@@ -9,7 +9,7 @@
             <div class="card-body">
               <h3 class="card-title">@item.header</h3>
               <a href="/p/@item.name">
-                <img class="rounded" src="@item.categoryImg" alt="@item.category" />
+                <img class="rounded" src="@item.categoryImg" alt="@item.category" height="50px"/>
               </a>
               <p class="card-text">@item.description</p>
               <p><a href="/p/@item.name">(see full post)</a></p>
