@@ -3,29 +3,19 @@ var router = express.Router();
 var app = express();
 var connection = require('../db/connection.js');
 var filesys = require('fs');
+var pd = require('../data/post.js');
 
 const db = connection.getDataBaseConnection(app);
 
 // index
 router.get('/', (req, res, next) => {
   if (req.session.isauthenticated) {
-    db.query('SELECT id, ispublished, modifytimestamp, createtimestamp, header, category FROM nn."Post";', (err, qres) => {
-      if (err) {
-        return next(err)
-      }
-      let data = qres.rows,
-        viewmodel = data.map(d => {
-          return {
-            'id': d.id,
-            'ispublished': d.ispublished ? 'Yes' : 'No',
-            'modifytimestamp': d.modifytimestamp ? d.modifytimestamp.toLocaleString('en-US', { timeZone: 'UTC' }) : '',
-            'createtimestamp': d.createtimestamp.toLocaleString('en-US', { timeZone: 'UTC' }),
-            'header': d.header,
-            'category': d.category
-          }
-        });
-
-      res.render('post/index', { title: 'all posts', isauthenticated: req.session.isauthenticated, posts: viewmodel });
+    pd.getAll(function (err, all) {
+      res.render('post/index', {
+        title: 'all posts',
+        isauthenticated: req.session.isauthenticated,
+        posts: all
+      });
     })
   } else {
     res.redirect('/');

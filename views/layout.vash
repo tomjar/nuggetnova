@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>@model.title</title>
   <link rel="shortcut icon" type="image/png" href="/images/nuggetnova.ico"/>
 
@@ -14,13 +14,27 @@
   <script src="/javascripts/umd/popper.js"></script>
   <script src="/javascripts/bootstrap.js"></script>
   <script src="/javascripts/trumbowyg.js"></script>
+  <div class="jumbotron main" style="background-color:black !important;">
+    <a href="/"><img src="/images/banner.png"/></a>
+  </div>
 </head>
 <body>
-  <div class="container">
+
+  <div class="sidenav">
+    <a href="/">home</a>
+    <a data-toggle="collapse" href="#collapse-archive" aria-expanded="false" aria-controls="collapse-archive">
+      archive
+    </a>
+    <div class="collapse" id="collapse-archive">
+      @html.block('archive')
+    </div>
+    <a href="/about">about</a>
+  </div>
+
+  <div class="rounded main">
 
   <!-- begin header menu -->
         <nav class="navbar navbar-expand-lg">
-          <a class="navbar-brand" href="/"><img src="/images/banner.png" /></a>
           @if (model.isauthenticated){
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
               <span class="navbar-toggler-icon"></span>
@@ -47,28 +61,7 @@
           }
         </nav>
   <!-- end header -->
-    
-    <!-- begin main content -->
-    <div class="row">
-      <div class="col-sm-9">
-        @html.block('content')
-      </div>
-      <div class="col">
-        @html.include('archive', model)
-      </div>
-    </div>
-    <!-- end main content -->
-
-    <div class="clearfix"></div>
-
-    <!-- begin footer -->
-    <div class="row text-center fixed-bottom" id="footer">
-      <div class="col">
-        <a href="/about">about</a>
-      </div>
-    </div>
-    <!-- end footer -->
-
+    @html.block('content')
   </div>
 </body>
 

@@ -35,7 +35,7 @@ router.get('/salts', (req, res, next) => {
 
 // home
 router.get('/', (req, res, next) => {
-  pd.getAllPublished(function (err, lastThirtyDays) {
+  pd.getAllPublishedLastThirtyDays(function (err, lastThirtyDays) {
 
     if (err) {
       return next(err);
@@ -48,7 +48,7 @@ router.get('/', (req, res, next) => {
       }
 
       res.render('index', {
-        title: 'recent (last 30 days)',
+        title: 'recent',
         isauthenticated: req.session.isauthenticated,
         posts: lastThirtyDays,
         yearAndPosts: yearAndPosts

@@ -1,42 +1,29 @@
 var express = require('express');
 var router = express.Router();
-var app = express();
-var connection = require('../db/connection.js');
-
-const db = connection.getDataBaseConnection(app);
+var pd = require('../data/post.js');
 
 // view
 router.get('/:name', (req, res, next) => {
     let name = req.params.name;
-    console.log(name);
-    db.query('SELECT id, header, createtimestamp, modifytimestamp, ispublished, description, name, category FROM nn."Post" WHERE name=$1;',
-        [name], (err, qres) => {
+
+    pd.getPostByName(name, function (err, viewmodel) {
+        if (err) {
+            return next(err);
+        }
+
+        pd.getAllArchived(function (err, yearAndPosts) {
             if (err) {
-                return next(err)
-            }
-
-            let data = qres.rows,
-                viewmodel = data.map(d => {
-                    return {
-                        'postid': d.id,
-                        'description': d.description,
-                        'header': d.header,
-                        'name': d.name,
-                        'createtimestamp': d.createtimestamp,
-                        'category': d.category
-                    }
-                })[0];
-
-            if (data.length <= 0) {
-                return next('');
+                return next(err);
             }
 
             res.render('pub', {
                 title: viewmodel.header,
                 isauthenticated: req.session.isauthenticated,
-                post: viewmodel
+                post: viewmodel,
+                yearAndPosts: yearAndPosts
             });
         })
+    })
 });
 
 module.exports = router;
