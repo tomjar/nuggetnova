@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var pd = require('../data/post.js');
+var filesys = require('fs');
 
 // view
 router.get('/:name', (req, res, next) => {
@@ -16,12 +17,31 @@ router.get('/:name', (req, res, next) => {
                 return next(err);
             }
 
-            res.render('pub', {
-                title: viewmodel.header,
-                isauthenticated: req.session.isauthenticated,
-                post: viewmodel,
-                yearAndPosts: yearAndPosts
-            });
+            let path = `views/p/${viewmodel.name}.vash`;
+
+            filesys.readFile(path, (err1, content) => {
+                if (err1) {
+                    filesys.writeFile(path, '<p></p>', (err2) => {
+                        if (err2) {
+                            return next(err2);
+                        } else {
+                            res.render('pub', {
+                                title: viewmodel.header,
+                                isauthenticated: req.session.isauthenticated,
+                                post: viewmodel,
+                                yearAndPosts: yearAndPosts
+                            });
+                        }
+                    })
+                } else {
+                    res.render('pub', {
+                        title: viewmodel.header,
+                        isauthenticated: req.session.isauthenticated,
+                        post: viewmodel,
+                        yearAndPosts: yearAndPosts
+                    });
+                }
+            })
         })
     })
 });

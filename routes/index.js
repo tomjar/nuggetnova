@@ -85,8 +85,12 @@ router.get('/logout', (req, res, next) => {
 
 // login
 router.get('/login', (req, res, next) => {
-  // TODO: check if user in the naughty list
-  res.render('login', { title: 'Login' });
+  if (req.session.lockout) {
+    res.redirect('../');
+  } else {
+    // TODO: check if user in the naughty list
+    res.render('login', { title: 'Login' });
+  }
 }).post('/login', (req, res, next) => {
   // TODO: check if user in the naughty list
   auth.validatePassword(req.body.secretKey, db, function (valid) {
@@ -95,6 +99,7 @@ router.get('/login', (req, res, next) => {
       req.session.isauthenticated = true;
       res.redirect('../');
     } else {
+      req.session.lockout = true;
       // TODO: log it
       // TODO: lock out of login page
       // TODO: warn the user

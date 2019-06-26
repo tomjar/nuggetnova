@@ -48,7 +48,7 @@ router.get('/add', (req, res, next) => {
       postCategory = req.body.postCategory,
       filePath = `views/p/${postName}.vash`;
 
-    filesys.writeFile(filePath, '<p></p>', (err) => {
+    filesys.writeFile(filePath, '', (err) => {
       if (err) {
         return next(err);
       }
@@ -86,12 +86,8 @@ router.get('/edit/:id', (req, res, next) => {
         return next('Nothing found');
       }
 
-      filesys.readFile(`views/p/${data[0].name}.vash`, (err, content) => {
-        if (err) {
-          return next(err);
-        }
-
-        let viewmodel = data.map(d => {
+      let path = `views/p/${data[0].name}.vash`,
+        viewmodel = data.map(d => {
           return {
             'id': d.id,
             'header': d.header,
@@ -99,7 +95,7 @@ router.get('/edit/:id', (req, res, next) => {
             'description': d.description,
             'name': d.name,
             'category': d.category,
-            'content': content,
+            'content': '',
             'categories': [
               { 'value': 'bicycle', 'name': 'bicycle' },
               { 'value': 'code', 'name': 'code' },
@@ -111,8 +107,29 @@ router.get('/edit/:id', (req, res, next) => {
           }
         })[0];
 
-        res.render('post/edit', { title: data.header, isauthenticated: req.session.isauthenticated, post: viewmodel });
+      filesys.readFile(path, (err1, content) => {
+        if (err1) {
+          filesys.writeFile(path, '', (err2) => {
+            if (err2) {
+              return next(err2);
+            } else {
+              res.render('post/edit', {
+                title: data.header,
+                isauthenticated: req.session.isauthenticated,
+                post: viewmodel
+              });
+            }
+          })
+        } else {
 
+          viewmodel.content = content;
+
+          res.render('post/edit', {
+            title: data.header,
+            isauthenticated: req.session.isauthenticated,
+            post: viewmodel
+          });
+        }
       });
     })
   } else {
@@ -125,8 +142,6 @@ router.get('/edit/:id', (req, res, next) => {
       postDescription = req.body.postDescription,
       postId = req.body.postId,
       postCategory = req.body.postCategory;
-
-    console.log(req.body);
 
     db.query('UPDATE nn."Post" SET category=$1, header=$2, modifytimestamp=now(), ispublished=$3, description=$4 WHERE id = $5;',
       [postCategory, postHeader, postIsPublished, postDescription, postId], (err, qres) => {
