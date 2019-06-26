@@ -126,6 +126,8 @@ router.get('/edit/:id', (req, res, next) => {
       postId = req.body.postId,
       postCategory = req.body.postCategory;
 
+    console.log(req.body);
+
     db.query('UPDATE nn."Post" SET category=$1, header=$2, modifytimestamp=now(), ispublished=$3, description=$4 WHERE id = $5;',
       [postCategory, postHeader, postIsPublished, postDescription, postId], (err, qres) => {
         if (err) {

@@ -69,6 +69,7 @@ var PostData = {
                     return {
                         'id': item.id,
                         'header': item.header,
+                        'ispublished': item.ispublished,
                         'createtimestamp': item.createtimestamp.toLocaleString('en-US', { timeZone: 'UTC' }),
                         'modifytimestamp': item.modifytimestamp ? item.modifytimestamp.toLocaleString('en-US', { timeZone: 'UTC' }) : '',
                         'description': item.description,

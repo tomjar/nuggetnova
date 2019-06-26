@@ -1,7 +1,7 @@
 @html.extend('layout', function(model) {
   @html.block('content', function(model) {
     <h1>@model.title</h1>
-    <form method="post" action="/post/update">
+    <form method="post" action="/post/update" id="formUpdatePost">
       <input id="postId" name="postId" type="hidden" value='@model.post.id' />
 
       <div class="row">
@@ -27,12 +27,17 @@
           <input type="text" class="form-control" name="postHeader" value='@model.post.header' placeholder="header" />
         </div>
         <div class="col">
-          @if(model.post.ispublished){
-            <input type="checkbox" class="form-check-input" name="postIsPublished" checked />
-          }else{
-            <input type="checkbox" class="form-check-input" name="postIsPublished" />
-          }
-          <label class="form-check-label" for="postIsPublished">publish post?</label>
+        <label for="postIsPublished">publish post?:</label>
+          <select class="form-control" name="postIsPublished">
+            @if (model.post.ispublished){
+            <option value="true" selected>Yes</option>
+            <option value="false">No</option>
+            }else{
+            <option value="true">Yes</option>
+            <option value="false" selected>No</option>
+            }
+          </select>
+          
         </div>
       </div>
 
@@ -54,7 +59,7 @@
       </div>
     </form>
 
-    <form method="post" action="/post/write">
+    <form method="post" action="/post/write" id="formWriteContent">
     <input id="postId" name="postId" type="hidden" value='@model.post.id' />
       <input type="hidden" name="postName" value='@model.post.name' />
       <div class="row">
@@ -76,13 +81,11 @@
     </form>
 
     <script>
-    // A $( document ).ready() block.
     $( document ).ready(function() {
       $('.trumbowyg').trumbowyg({
         tagsToRemove: ['script']
       });
     });
-
     </script>
   })    
 })
