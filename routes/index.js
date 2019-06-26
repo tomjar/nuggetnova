@@ -2,39 +2,9 @@ var express = require('express');
 var router = express.Router();
 var auth = require('../auth/index.js');
 var connection = require('../db/connection.js');
+var pd = require('../data/post.js');
 
 const db = connection.getDataBaseConnection();
-
-// archive
-router.get('/archive', (req, res, next) => {
-  db.query('SELECT id, header, createtimestamp, modifytimestamp, ispublished, description, name FROM nn."Post" WHERE ispublished = true ORDER BY createtimestamp DESC;',
-    [], (err, qres) => {
-      if (err) {
-        return next(err)
-      }
-
-      let data = qres.rows,
-        uniqueYears = data.map(item => {
-          return item.createtimestamp.getFullYear();
-        }).filter((item, index, arr) => {
-          return arr.indexOf(item) === index;
-        }),
-
-        yearAndPosts = uniqueYears.map(uy => {
-          return {
-            'year': uy, 'posts': data.filter(p => {
-              return p.createtimestamp.getFullYear() === uy;
-            })
-          }
-        });
-
-      res.render('archive', {
-        title: 'Archive',
-        isauthenticated: req.session.isauthenticated,
-        yearAndPosts: yearAndPosts
-      });
-    })
-});
 
 // salts
 router.get('/salts', (req, res, next) => {
@@ -65,35 +35,25 @@ router.get('/salts', (req, res, next) => {
 
 // home
 router.get('/', (req, res, next) => {
+  pd.getAllPublished(function (err, lastThirtyDays) {
 
-  db.query('SELECT id, header, createtimestamp, modifytimestamp, ispublished, description, name, category FROM nn."Post" WHERE ispublished = true ORDER BY createtimestamp DESC;', (err, qres) => {
     if (err) {
-      return next(err)
+      return next(err);
     }
 
-    let data = qres.rows,
-      today = new Date(),
-      priorDate = new Date().setDate(today.getDate() - 30),
-      lastThirtyDays = data.filter(item => {
-        return item.createtimestamp.getTime() >= priorDate;
-      }).map(item => {
-        return {
-          'id': item.id,
-          'header': item.header,
-          'createtimestamp': item.createtimestamp.toLocaleString('en-US', { timeZone: 'UTC' }),
-          'modifytimestamp': item.modifytimestamp ? item.modifytimestamp.toLocaleString('en-US', { timeZone: 'UTC' }) : '',
-          'description': item.description,
-          'name': item.name,
-          'categoryImg': `/images/categories/${item.category}.png`,
-          'category': item.category
-        }
-      });
+    pd.getAllArchived(function (err, yearAndPosts) {
 
-    res.render('index', {
-      title: 'recent (last 30 days)',
-      isauthenticated: req.session.isauthenticated,
-      posts: lastThirtyDays
-    });
+      if (err) {
+        return next(err);
+      }
+
+      res.render('index', {
+        title: 'recent (last 30 days)',
+        isauthenticated: req.session.isauthenticated,
+        posts: lastThirtyDays,
+        yearAndPosts: yearAndPosts
+      });
+    })
   })
 });
 

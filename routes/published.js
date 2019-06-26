@@ -9,7 +9,7 @@ const db = connection.getDataBaseConnection(app);
 router.get('/:name', (req, res, next) => {
     let name = req.params.name;
     console.log(name);
-    db.query('SELECT id, header, createtimestamp, modifytimestamp, ispublished, description, name FROM nn."Post" WHERE name=$1;',
+    db.query('SELECT id, header, createtimestamp, modifytimestamp, ispublished, description, name, category FROM nn."Post" WHERE name=$1;',
         [name], (err, qres) => {
             if (err) {
                 return next(err)
@@ -21,7 +21,9 @@ router.get('/:name', (req, res, next) => {
                         'postid': d.id,
                         'description': d.description,
                         'header': d.header,
-                        'name': d.name
+                        'name': d.name,
+                        'createtimestamp': d.createtimestamp,
+                        'category': d.category
                     }
                 })[0];
 
@@ -29,7 +31,7 @@ router.get('/:name', (req, res, next) => {
                 return next('');
             }
 
-            res.render(`p/${viewmodel.name}`, {
+            res.render('pub', {
                 title: viewmodel.header,
                 isauthenticated: req.session.isauthenticated,
                 post: viewmodel

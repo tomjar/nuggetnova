@@ -56,17 +56,9 @@ router.get('/add', (req, res, next) => {
       postDescription = req.body.postDescription,
       postName = req.body.postName,
       postCategory = req.body.postCategory,
-      filePath = `views/p/${postName}.vash`,
-      baseContent = `@html.extend('layout', function(model) {
-        @html.block('content', function(model) {
-          <h1>@model.title</h1>
-          <p>PLACE YOUR CONTENT HERE!</p>
-        })
-      })`;
+      filePath = `views/p/${postName}.vash`;
 
-    const bufferData = new Uint8Array(Buffer.from(baseContent));
-
-    filesys.writeFile(filePath, bufferData, (err) => {
+    filesys.writeFile(filePath, '<p></p>', (err) => {
       if (err) {
         return next(err);
       }

@@ -18,11 +18,10 @@
 <body>
   <div class="container">
 
-  <!-- header menu begin -->
-  <div>
+  <!-- begin header menu -->
         <nav class="navbar navbar-expand-lg">
           <a class="navbar-brand" href="/"><img src="/images/banner.png" /></a>
-          @if(model.isauthenticated){
+          @if (model.isauthenticated){
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
               <span class="navbar-toggler-icon"></span>
             </button>
@@ -47,26 +46,28 @@
           </ul>
           }
         </nav>
-  </div>
-  <!-- header end -->
+  <!-- end header -->
     
-    
+    <!-- begin main content -->
     <div class="row">
-      <div class="col">
+      <div class="col-sm-9">
         @html.block('content')
       </div>
+      <div class="col">
+        @html.include('archive', model)
+      </div>
     </div>
+    <!-- end main content -->
 
     <div class="clearfix"></div>
 
-    <!-- footer begin -->
+    <!-- begin footer -->
     <div class="row text-center fixed-bottom" id="footer">
       <div class="col">
         <a href="/about">about</a>
-        <a href='/archive'>archive</a>
       </div>
     </div>
-    <!-- footer end -->
+    <!-- end footer -->
 
   </div>
 </body>
