@@ -1,68 +1,33 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>@model.title</title>
   <link rel="shortcut icon" type="image/png" href="/images/nuggetnova.ico"/>
 
   <link rel="stylesheet" href="/stylesheets/bootstrap.css" />
   <link rel="stylesheet" href="/stylesheets/trumbowyg.css" />
-  <link rel='stylesheet' href='/stylesheets/style.css' />
   <link rel='stylesheet' href='/stylesheets/custom.css' />
+</head>
 
+<body>
+<div class="container-fluid">
+  <div class="row content">
+    <div class="col-sm-3 sidenav">
+      @html.include('_sidelinks', model)
+      @html.block('archive')
+    </div>
+    <div class="col-sm-9">
+      @html.block('content')
+    </div>
+  </div>
+</div>
+@html.include('_footer', model)
   <script src="/javascripts/jquery.js"></script>
   <script src="/javascripts/umd/popper.js"></script>
   <script src="/javascripts/bootstrap.js"></script>
   <script src="/javascripts/trumbowyg.js"></script>
-  <div class="jumbotron main" style="background-color:black !important;">
-    <a href="/"><img src="/images/banner.png"/></a>
-  </div>
-</head>
-<body>
-
-  <div class="sidenav">
-    <a href="/">home</a>
-    <a data-toggle="collapse" href="#collapse-archive" aria-expanded="false" aria-controls="collapse-archive">
-      archive
-    </a>
-    <div class="collapse" id="collapse-archive">
-      @html.block('archive')
-    </div>
-    <a href="/about">about</a>
-  </div>
-
-  <div class="rounded main">
-
-  <!-- begin header menu -->
-        <nav class="navbar navbar-expand-lg">
-          @if (model.isauthenticated){
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-              <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-              <ul class="navbar-nav mr-auto">
-                <li class="nav-item dropdown">
-                  <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    administration
-                  </a>
-                  <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" href="/post/">posts</a>
-                    <a class="dropdown-item" href="/post/add">add new post</a>
-                    <a class="dropdown-item" href='/salts'>random salts</a>
-                  </div>
-                </li>
-              </ul>
-            </div>
-            <ul class="navbar-nav">
-              <li class="nav-item float-right">
-                <a class="nav-link" href="/logout">logout <span class="sr-only">(current)</span></a>
-              </li>
-          </ul>
-          }
-        </nav>
-  <!-- end header -->
-    @html.block('content')
-  </div>
 </body>
 
 </html>

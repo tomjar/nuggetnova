@@ -1,17 +1,12 @@
 
+<hr />
+<h3>archive</h3>
+<div class="archive">
 @model.yearAndPosts.forEach(function(item){
-  <div class="accordion" id="accordion-@item.year">
-    <div class="card">
-      <div class="card-header" id="heading-@item.year">
-          <button class="btn btn-link" type="button" data-toggle="collapse" data-target='#year-@item.year' aria-expanded="true" aria-controls='@item.year'>
-            @item.year
-          </button>
-      </div>
-      <div id='year-@item.year' class="collapse" aria-labelledby="heading-@item.year" data-parent="#accordion-@item.year">
+  <strong>@item.year</strong>
+  <br />
       @item.posts.forEach(function(p){
-        <a href='/p/@p.name'>@p.header</a>
+        <small><a href='/p/@p.name'>@p.header</a></small>
       })
-      </div>
-    </div>
-  </div>
 })
+</div>

@@ -7,13 +7,14 @@
           <div class="p-2 bd-highlight">
           <div class="card">
             <div class="card-body">
-              <h3 class="card-title">@item.header</h3>
+            
+              <h3 class="card-title"></h3>
               <a href="/p/@item.name">
                 <img class="rounded" src="@item.categoryImg" alt="@item.category" height="50px"/>
+                @item.header
               </a>
               <p class="card-text">@item.description</p>
-              <p><a href="/p/@item.name">(see full post)</a></p>
-              <i style="font-size:xx-small;">@item.createtimestamp (UTC)</i>
+              <small>published on @item.createtimestamp (UTC)</small>
             </div>
         </div>
       </div>
