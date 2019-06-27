@@ -1,9 +1,3 @@
-# Views p folder, ignore all files
-views/p/*
-
-# Views p folder, dont ignore the gitkeep file, intended to keep p dir
-!views/p/.gitkeep
-
 # Logs
 logs
 *.log
