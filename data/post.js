@@ -3,6 +3,16 @@ var connection = require('../db/connection.js');
 const db = connection.getDataBaseConnection();
 
 var PostData = {
+    updatePostPublished: function (ispublished, id, callback) {
+        db.query('UPDATE nn."Post" SET ispublished=$1, modifytimestamp=now() WHERE id = $2;',
+            [ispublished, id], (err, qres) => {
+                if (err) {
+                    callback(err, null);
+                } else {
+                    callback(null, qres);
+                }
+            })
+    },
     updatePostModifiedTimestamp: function (id, callback) {
         db.query('UPDATE nn."Post" SET modifytimestamp=now() WHERE id = $1;',
             [id], (err, qres) => {
@@ -40,7 +50,6 @@ var PostData = {
                 if (err) {
                     callback(err, null);
                 } else {
-
                     if (data.length <= 0) {
                         callback('Not found', null);
                     } else {
@@ -66,26 +75,26 @@ var PostData = {
             [name], (err, qres) => {
                 if (err) {
                     callback(err, {});
+                } else {
+                    let data = qres.rows,
+                        post = data.map(d => {
+                            return {
+                                'postid': d.id,
+                                'description': d.description,
+                                'header': d.header,
+                                'name': d.name,
+                                'createtimestamp': d.createtimestamp.toLocaleString('en-US', { timeZone: 'UTC' }),
+                                'modifytimestamp': d.modifytimestamp ? d.modifytimestamp.toLocaleString('en-US', { timeZone: 'UTC' }) : '',
+                                'category': d.category
+                            }
+                        })[0];
+
+                    if (data.length <= 0) {
+                        callback('Not found', {});
+                    } else {
+                        callback(null, post);
+                    }
                 }
-
-                let data = qres.rows,
-                    viewmodel = data.map(d => {
-                        return {
-                            'postid': d.id,
-                            'description': d.description,
-                            'header': d.header,
-                            'name': d.name,
-                            'createtimestamp': d.createtimestamp.toLocaleString('en-US', { timeZone: 'UTC' }),
-                            '': d.modifytimestamp ? d.modifytimestamp.toLocaleString('en-US', { timeZone: 'UTC' }) : '',
-                            'category': d.category
-                        }
-                    })[0];
-
-                if (data.length <= 0) {
-                    callback('Not found', {});
-                }
-
-                callback(null, viewmodel);
             })
     },
     getAll: function (callback) {

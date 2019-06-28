@@ -1,11 +1,7 @@
 var express = require('express');
 var router = express.Router();
-var app = express();
-var connection = require('../db/connection.js');
 var filesys = require('fs');
 var pd = require('../data/post.js');
-
-const db = connection.getDataBaseConnection(app);
 
 // index
 router.get('/', (req, res, next) => {
@@ -172,19 +168,19 @@ router.get('/edit/:id', (req, res, next) => {
       }
     });
   }
-})
+});
 
 // activate
 router.get('/activate/:id', (req, res, next) => {
   if (req.session.isauthenticated) {
     let id = req.params.id;
-    db.query('UPDATE nn."Post" SET ispublished=true, modifytimestamp=now() WHERE id = $1;', [id], (err, qres) => {
+    pd.updatePostPublished(true, id, function (err, result) {
       if (err) {
         return next(err);
+      } else {
+        res.redirect('/post');
       }
-      res.redirect('/post');
     })
-
   } else {
     res.redirect('/');
   }
@@ -194,13 +190,13 @@ router.get('/activate/:id', (req, res, next) => {
 router.get('/deactivate/:id', (req, res, next) => {
   if (req.session.isauthenticated) {
     let id = req.params.id;
-    db.query('UPDATE nn."Post" SET ispublished=false, modifytimestamp=now() WHERE id = $1;', [id], (err, qres) => {
+    pd.updatePostPublished(false, id, function (err, result) {
       if (err) {
         return next(err);
+      } else {
+        res.redirect('/post');
       }
-      res.redirect('/post');
     })
-
   } else {
     res.redirect('/');
   }
