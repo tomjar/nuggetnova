@@ -9,6 +9,10 @@
   <link rel="stylesheet" href="/stylesheets/bootstrap.css" />
   <link rel="stylesheet" href="/stylesheets/trumbowyg.css" />
   <link rel='stylesheet' href='/stylesheets/custom.css' />
+  <script src="/javascripts/jquery.js"></script>
+  <script src="/javascripts/umd/popper.js"></script>
+  <script src="/javascripts/bootstrap.js"></script>
+  <script src="/javascripts/trumbowyg.js"></script>
 </head>
 
 <body>
@@ -24,9 +28,6 @@
   </div>
 </div>
 @html.include('_footer', model)
-  <script src="/javascripts/jquery.js"></script>
-  <script src="/javascripts/umd/popper.js"></script>
-  <script src="/javascripts/bootstrap.js"></script>
-  <script src="/javascripts/trumbowyg.js"></script>
+
 </body>
 </html>
