@@ -5,11 +5,11 @@
       <input id="postId" name="postId" type="hidden" value='@model.post.id' />
 
       <div class="row">
-              <div class="col">
+        <div class="col">
           <label for="">name(view file name):</label>
           <span class="form-control" name="postName">@model.post.name</span>
         </div>
-                <div class="col">
+        <div class="col">
           <label for="postCategory">category:</label>
           <select class="form-control" name="postCategory">
             @model.post.categories.forEach(function(item){
@@ -27,17 +27,16 @@
           <input type="text" class="form-control" name="postHeader" value='@model.post.header' placeholder="header" />
         </div>
         <div class="col">
-        <label for="postIsPublished">publish post?:</label>
-          <select class="form-control" name="postIsPublished">
-            @if (model.post.ispublished){
-            <option value="true" selected>Yes</option>
-            <option value="false">No</option>
-            }else{
-            <option value="true">Yes</option>
-            <option value="false" selected>No</option>
-            }
-          </select>
-          
+          <label for="postIsPublished">publish post?:</label>
+            <select class="form-control" name="postIsPublished">
+              @if (model.post.ispublished){
+              <option value="true" selected>Yes</option>
+              <option value="false">No</option>
+              }else{
+              <option value="true">Yes</option>
+              <option value="false" selected>No</option>
+              }
+            </select>
         </div>
       </div>
 
@@ -68,8 +67,6 @@
           <textarea type="text" class="form-control trumbowyg" name="postContent" rows="25" placeholder="content">@model.post.content</textarea>
         </div>
       </div>
-
-      
 
       <div class="clearfix"><br /></div>
 
