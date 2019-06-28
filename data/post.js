@@ -3,31 +3,62 @@ var connection = require('../db/connection.js');
 const db = connection.getDataBaseConnection();
 
 var PostData = {
+    updatePostModifiedTimestamp: function (id, callback) {
+        db.query('UPDATE nn."Post" SET modifytimestamp=now() WHERE id = $1;',
+            [id], (err, qres) => {
+                if (err) {
+                    callback(err, null);
+                } else {
+                    callback(err, qres);
+                }
+            })
+    },
+    updatePost: function (category, header, ispublished, description, id, callback) {
+        db.query('UPDATE nn."Post" SET category=$1, header=$2, modifytimestamp=now(), ispublished=$3, description=$4 WHERE id = $5;',
+            [category, header, ispublished, description, id], (err, qres) => {
+                if (err) {
+                    callback(err, null);
+                } else {
+                    callback(err, qres);
+                }
+            })
+    },
+    insertPost: function (header, description, name, category, callback) {
+        db.query('INSERT INTO nn."Post"(id, header, createtimestamp, modifytimestamp, ispublished, description, name, category) '
+            + 'VALUES (uuid_generate_v1(), $1, now(), NULL, false, $2, $3, $4);',
+            [header, description, name, category], (err, qres) => {
+                if (err) {
+                    callback(err, null);
+                } else {
+                    callback(null, qres);
+                }
+            })
+    },
     getPostById: function (id, callback) {
         db.query('SELECT id, header, createtimestamp, modifytimestamp, ispublished, description, name, category FROM nn."Post" WHERE id=$1;',
             [id], (err, qres) => {
                 if (err) {
-                    callback(err, {});
+                    callback(err, null);
+                } else {
+
+                    if (data.length <= 0) {
+                        callback('Not found', null);
+                    } else {
+                        let data = qres.rows,
+                            post = data.map(d => {
+                                return {
+                                    'postid': d.id,
+                                    'description': d.description,
+                                    'header': d.header,
+                                    'name': d.name,
+                                    'createtimestamp': d.createtimestamp,
+                                    'category': d.category
+                                }
+                            })[0];
+
+                        callback(null, post);
+                    }
                 }
-
-                let data = qres.rows,
-                    viewmodel = data.map(d => {
-                        return {
-                            'postid': d.id,
-                            'description': d.description,
-                            'header': d.header,
-                            'name': d.name,
-                            'createtimestamp': d.createtimestamp,
-                            'category': d.category
-                        }
-                    })[0];
-
-                if (data.length <= 0) {
-                    callback('Not found', {});
-                }
-
-                callback(null, viewmodel);
-
             })
     },
     getPostByName: function (name, callback) {
