@@ -1,6 +1,5 @@
 var express = require('express');
 var router = express.Router();
-var filesys = require('fs');
 var pd = require('../data/post.js');
 
 // index
@@ -46,29 +45,22 @@ router.get('/add', (req, res, next) => {
       postDescription = req.body.postDescription,
       postName = req.body.postName,
       postCategory = req.body.postCategory,
-      filePath = `views/p/${postName}.vash`;
+      postBody = req.body.postBody;
 
-    filesys.writeFile(filePath, '', (err) => {
+    pd.insertPost(postHeader, postDescription, postName, postCategory, postBody, function (err) {
       if (err) {
         return next(err);
       } else {
-        pd.insertPost(postHeader, postDescription, postName, postCategory, function (err) {
-          if (err) {
-            return next(err);
-          } else {
-            res.redirect('/post');
-          }
-        })
+        res.redirect('/post');
       }
-    });
-
+    })
   } else {
     res.redirect('/');
   }
 });
 
-// edit/update
-router.get('/edit/:id', (req, res, next) => {
+// update
+router.get('/update/:id', (req, res, next) => {
   if (req.session.isauthenticated) {
     let id = req.params.id;
 
@@ -76,50 +68,30 @@ router.get('/edit/:id', (req, res, next) => {
       if (err) {
         return next(err);
       } else {
-        let path = `views/p/${post.name}.vash`,
-          viewmodel = {
-            'id': post.id,
-            'header': post.header,
-            'ispublished': post.ispublished,
-            'description': post.description,
-            'name': post.name,
-            'category': post.category,
-            'content': '',
-            'categories': [
-              { 'value': 'bicycle', 'name': 'bicycle' },
-              { 'value': 'code', 'name': 'code' },
-              { 'value': 'gaming', 'name': 'gaming' },
-              { 'value': 'hardware', 'name': 'hardware' },
-              { 'value': 'life', 'name': 'life' },
-              { 'value': 'review', 'name': 'review' }
-            ]
-          };
+        let viewmodel = {
+          'id': post.id,
+          'header': post.header,
+          'ispublished': post.ispublished,
+          'description': post.description,
+          'name': post.name,
+          'category': post.category,
+          'body': post.body,
+          'categories': [
+            { 'value': 'bicycle', 'name': 'bicycle' },
+            { 'value': 'code', 'name': 'code' },
+            { 'value': 'gaming', 'name': 'gaming' },
+            { 'value': 'hardware', 'name': 'hardware' },
+            { 'value': 'life', 'name': 'life' },
+            { 'value': 'review', 'name': 'review' }
+          ]
+        };
 
-
-        filesys.readFile(path, (err1, content) => {
-          if (err1) {
-            filesys.writeFile(path, '', (err2) => {
-              if (err2) {
-                return next(err2);
-              } else {
-                res.render('post/edit', {
-                  title: data.header,
-                  isauthenticated: req.session.isauthenticated,
-                  post: viewmodel
-                });
-              }
-            })
-          } else {
-
-            viewmodel.content = content;
-
-            res.render('post/edit', {
-              title: data.header,
-              isauthenticated: req.session.isauthenticated,
-              post: viewmodel
-            });
-          }
+        res.render('post/edit', {
+          title: viewmodel.header,
+          isauthenticated: req.session.isauthenticated,
+          post: viewmodel
         });
+
       }
     })
   } else {
@@ -131,9 +103,10 @@ router.get('/edit/:id', (req, res, next) => {
       postIsPublished = req.body.postIsPublished,
       postDescription = req.body.postDescription,
       postId = req.body.postId,
-      postCategory = req.body.postCategory;
+      postCategory = req.body.postCategory,
+      postBody = req.body.postBody;
 
-    pd.updatePost(postCategory, postHeader, postIsPublished, postDescription, postId, function (err, result) {
+    pd.updatePost(postCategory, postHeader, postIsPublished, postDescription, postBody, postId, function (err, result) {
       if (err) {
         return next(err);
       } else {
@@ -144,29 +117,6 @@ router.get('/edit/:id', (req, res, next) => {
     });
   } else {
     res.redirect('/');
-  }
-}).post('/write', (req, res, next) => {
-  if (req.session.isauthenticated) {
-    let postId = req.body.postId,
-      content = req.body.postContent,
-      name = req.body.postName,
-      filePath = `views/p/${name}.vash`;
-
-    const bufferData = new Uint8Array(Buffer.from(content));
-
-    filesys.writeFile(filePath, bufferData, (err) => {
-      if (err) {
-        return next(err);
-      } else {
-        pd.updatePostModifiedTimestamp(postId, function (err, result) {
-          if (err) {
-            return next(err);
-          } else {
-            res.redirect('/post');
-          }
-        })
-      }
-    });
   }
 });
 
@@ -200,6 +150,42 @@ router.get('/deactivate/:id', (req, res, next) => {
   } else {
     res.redirect('/');
   }
+});
+
+// view
+router.get('/view/:name', (req, res, next) => {
+  let name = req.params.name;
+
+  pd.getPostByName(name, function (err, post) {
+    if (err) {
+      return next(err);
+    } else {
+      pd.getAllArchived(function (err, yearAndPosts) {
+        if (err) {
+          return next(err);
+        } else {
+
+          let viewmodel = {
+            'id': post.id,
+            'description': post.description,
+            'header': post.header,
+            'name': post.name,
+            'createtimestamp': post.createtimestamp.toLocaleString('en-US', { timeZone: 'UTC' }),
+            'modifytimestamp': post.modifytimestamp ? post.modifytimestamp.toLocaleString('en-US', { timeZone: 'UTC' }) : '',
+            'category': post.category,
+            'body': post.body
+          };
+
+          res.render('post/view', {
+            title: viewmodel.header,
+            isauthenticated: req.session.isauthenticated,
+            post: viewmodel,
+            yearAndPosts: yearAndPosts
+          });
+        }
+      })
+    }
+  })
 });
 
 module.exports = router;

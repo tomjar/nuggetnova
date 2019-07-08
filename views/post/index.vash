@@ -24,7 +24,7 @@
               Actions
             </button>
             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-              <a class="btn btn-default dropdown-item" href='/post/edit/@item.id'>edit</a>
+              <a class="btn btn-default dropdown-item" href='/post/update/@item.id'>edit</a>
               @if (item.ispublished){
                 <a class="btn btn-default dropdown-item" href='/post/deactivate/@item.id'>deactivate</a>
               }else{

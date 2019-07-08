@@ -23,9 +23,9 @@ var PostData = {
                 }
             })
     },
-    updatePost: function (category, header, ispublished, description, id, callback) {
-        db.query('UPDATE nn."Post" SET category=$1, header=$2, modifytimestamp=now(), ispublished=$3, description=$4 WHERE id = $5;',
-            [category, header, ispublished, description, id], (err, qres) => {
+    updatePost: function (category, header, ispublished, description, body, id, callback) {
+        db.query('UPDATE nn."Post" SET category=$1, header=$2, modifytimestamp=now(), ispublished=$3, description=$4, body=$5 WHERE id = $6;',
+            [category, header, ispublished, description, body, id], (err, qres) => {
                 if (err) {
                     callback(err, null);
                 } else {
@@ -33,10 +33,10 @@ var PostData = {
                 }
             })
     },
-    insertPost: function (header, description, name, category, callback) {
-        db.query('INSERT INTO nn."Post"(id, header, createtimestamp, modifytimestamp, ispublished, description, name, category) '
-            + 'VALUES (uuid_generate_v1(), $1, now(), NULL, false, $2, $3, $4);',
-            [header, description, name, category], (err, qres) => {
+    insertPost: function (header, description, name, category, body, callback) {
+        db.query('INSERT INTO nn."Post"(id, header, createtimestamp, modifytimestamp, ispublished, description, name, category, body) '
+            + 'VALUES (uuid_generate_v1(), $1, now(), NULL, false, $2, $3, $4, $5);',
+            [header, description, name, category, body], (err, qres) => {
                 if (err) {
                     callback(err, null);
                 } else {
@@ -45,60 +45,39 @@ var PostData = {
             })
     },
     getPostById: function (id, callback) {
-        db.query('SELECT id, header, createtimestamp, modifytimestamp, ispublished, description, name, category FROM nn."Post" WHERE id=$1;',
+        db.query('SELECT id, header, createtimestamp, modifytimestamp, ispublished, description, name, category, body FROM nn."Post" WHERE id=$1;',
             [id], (err, qres) => {
                 if (err) {
                     callback(err, null);
                 } else {
-                    if (data.length <= 0) {
+                    if (qres.rows.length <= 0) {
                         callback('Not found', null);
                     } else {
-                        let data = qres.rows,
-                            post = data.map(d => {
-                                return {
-                                    'postid': d.id,
-                                    'description': d.description,
-                                    'header': d.header,
-                                    'name': d.name,
-                                    'createtimestamp': d.createtimestamp,
-                                    'category': d.category
-                                }
-                            })[0];
+                        let data = qres.rows[0];
 
-                        callback(null, post);
+                        callback(null, data);
                     }
                 }
             })
     },
     getPostByName: function (name, callback) {
-        db.query('SELECT id, header, createtimestamp, modifytimestamp, ispublished, description, name, category FROM nn."Post" WHERE name=$1;',
+        db.query('SELECT id, header, createtimestamp, modifytimestamp, ispublished, description, name, category, body FROM nn."Post" WHERE name=$1;',
             [name], (err, qres) => {
                 if (err) {
                     callback(err, {});
                 } else {
-                    let data = qres.rows,
-                        post = data.map(d => {
-                            return {
-                                'postid': d.id,
-                                'description': d.description,
-                                'header': d.header,
-                                'name': d.name,
-                                'createtimestamp': d.createtimestamp.toLocaleString('en-US', { timeZone: 'UTC' }),
-                                'modifytimestamp': d.modifytimestamp ? d.modifytimestamp.toLocaleString('en-US', { timeZone: 'UTC' }) : '',
-                                'category': d.category
-                            }
-                        })[0];
+                    let data = qres.rows[0];
 
                     if (data.length <= 0) {
                         callback('Not found', {});
                     } else {
-                        callback(null, post);
+                        callback(null, data);
                     }
                 }
             })
     },
     getAll: function (callback) {
-        db.query('SELECT id, header, createtimestamp, modifytimestamp, ispublished, description, name, category FROM nn."Post" ORDER BY createtimestamp DESC;', (err, qres) => {
+        db.query('SELECT id, header, createtimestamp, modifytimestamp, ispublished, description, name, category, body FROM nn."Post" ORDER BY createtimestamp DESC;', (err, qres) => {
             if (err) {
                 callback(err, {});
             }
@@ -115,7 +94,8 @@ var PostData = {
                         'description': item.description,
                         'name': item.name,
                         'categoryImg': `/images/categories/${item.category}.png`,
-                        'category': item.category
+                        'category': item.category,
+                        'body': item.body
                     }
                 });
 
@@ -175,7 +155,7 @@ var PostData = {
     },
 
     getAllArchived: function (callback) {
-        db.query('SELECT id, header, createtimestamp, modifytimestamp, ispublished, description, name, category FROM nn."Post" WHERE ispublished = true ORDER BY createtimestamp DESC;', (err, qres) => {
+        db.query('SELECT id, header, ispublished, description, createtimestamp, name, category FROM nn."Post" WHERE ispublished = true ORDER BY createtimestamp DESC;', (err, qres) => {
             if (err) {
                 callback(err, {});
             }
@@ -188,7 +168,18 @@ var PostData = {
                 }),
                 yearAndPosts = uniqueYears.map(uy => {
                     return {
-                        'year': uy, 'posts': data.filter(p => {
+                        'year': uy, 'posts': data.map(d => {
+                            return {
+                                'id': d.id,
+                                'header': d.header,
+                                'ispublished': d.ispublished,
+                                'description': d.description,
+                                'createtimestamp': d.createtimestamp,
+                                'name': d.name,
+                                'category': d.category,
+                                'categoryImg': `/images/categories/${d.category}.png`,
+                            }
+                        }).filter(p => {
                             return p.createtimestamp.getFullYear() === uy;
                         })
                     }

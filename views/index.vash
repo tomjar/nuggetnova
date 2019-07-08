@@ -1,20 +1,19 @@
 @html.extend('layout', function(model) {
   @html.block('content', function(model) {
-    <h1 title="last thirty days">@model.title</h1>
+    <h1 title="last 30 days">@model.title</h1>
 
     <div class="d-flex flex-wrap flex-row bd-highlight mb-3">
       @model.posts.forEach(function(item){
           <div class="p-2 bd-highlight">
           <div class="card">
             <div class="card-body">
-            
               <h3 class="card-title"></h3>
-              <a href="/p/@item.name">
-                <img class="rounded" src="@item.categoryImg" alt="@item.category" height="50px"/>
+              <a href="/post/view/@item.name">
+                <img class="rounded" src="@item.categoryImg" alt="@item.category" height="100px"/>
                 @item.header
               </a>
               <p class="card-text">@item.description</p>
-              <small>published on @item.createtimestamp (UTC)</small>
+              <small>Published on @item.createtimestamp UTC</small>
             </div>
         </div>
       </div>

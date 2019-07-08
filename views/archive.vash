@@ -6,8 +6,11 @@
   <strong>@item.year</strong>
   <br />
       @item.posts.forEach(function(p){
-        <small><a href='/p/@p.name'>@p.header</a></small>
-        <br />
+        <p title="@p.description">
+          <a href="/post/view/@p.name">
+            <small>@p.header</small>
+          </a>
+        </p>
       })
 })
 </div>

@@ -17,10 +17,16 @@
       </p>
 
       <p>
-        <a href="https://github.com/tomjar" target="_blank">github</a> 
-        <a href="https://linkedin.com/in/tom-reese-b47049157" target="_blank">linkedin</a>
-        <a href="https://www.strava.com/athletes/24684389" target="_blank">strava</a>
-        <a href="https://setiathome.berkeley.edu" target="_blank">SETI@@home</a>
+        <a href="https://github.com/tomjar" target="_blank" title="Thomas Reese's github">github</a>
+      </p>
+      <p>
+        <a href="https://linkedin.com/in/tom-reese-b47049157" target="_blank" title="Thomas Reese's linkedin">linkedin</a>
+      </p>
+      <p>
+        <a href="https://www.strava.com/athletes/24684389" target="_blank" title="Thomas Reese's strava">strava</a>
+      </p>
+      <p>
+        <a href="https://setiathome.berkeley.edu" target="_blank" title="SETI@@home">SETI@@home</a>
       </p>
     </div>
 
