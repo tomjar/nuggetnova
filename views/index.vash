@@ -13,7 +13,11 @@
                 @item.header
               </a>
               <p class="card-text">@item.description</p>
-              <small>Published on @item.createtimestamp UTC</small>
+                <i style="font-size:xx-small;">published on @item.createtimestamp UTC</i>
+                <br />
+                @if (item.modifytimestamp) {
+                  <i style="font-size:xx-small;">last updated on @item.modifytimestamp UTC</i>
+                }
             </div>
         </div>
       </div>
