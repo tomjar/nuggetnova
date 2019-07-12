@@ -62,17 +62,17 @@
       <div class="row">
         <div class="col">
             <label>body:</label>
-            <textarea type="text" class="form-control trumbowyg" name="postBody" rows="25" placeholder="content">@model.post.body</textarea>
+            <textarea type="text" class="form-control trumbowyg" name="postBody" rows="25" placeholder="post content">@model.post.body</textarea>
         </div>
       </div>
     </form>
 
     <script>
-    $( document ).ready(function() {
-      $('.trumbowyg').trumbowyg({
-        tagsToRemove: ['script']
+      $( document ).ready(function() {
+        $('.trumbowyg').trumbowyg({
+          tagsToRemove: ['script', 'style']
+        });
       });
-    });
     </script>
   })    
 })

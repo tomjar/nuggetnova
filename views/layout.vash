@@ -13,21 +13,20 @@
   <script src="/javascripts/umd/popper.js"></script>
   <script src="/javascripts/bootstrap.js"></script>
   <script src="/javascripts/trumbowyg.js"></script>
-</head>
+</head> 
 
 <body>
-<div class="container-fluid">
-  <div class="row content">
-    <div class="col-sm-3 sidenav">
-      @html.include('_sidelinks', model)
-      @html.block('archive')
-    </div>
-    <div class="col-sm-9">
-      @html.block('content')
+  <div class="container-fluid">
+    <div class="row content">
+      <div class="col-sm-3 sidenav">
+        @html.include('_sidelinks', model)
+        @html.block('archive')
+      </div>
+      <div class="col-sm-9 main">
+        @html.block('content')
+      </div>
     </div>
   </div>
-</div>
-@html.include('_footer', model)
-
+  @html.include('_footer', model)
 </body>
 </html>
