@@ -3,33 +3,6 @@ var router = express.Router();
 var auth = require('../data/auth.js');
 var pd = require('../data/post.js');
 
-// salts
-router.get('/salts', (req, res, next) => {
-  if (req.session.isauthenticated) {
-    let salts = [
-      auth.generateRandomSalt(100),
-      auth.generateRandomSalt(100),
-      auth.generateRandomSalt(100),
-      auth.generateRandomSalt(100),
-      auth.generateRandomSalt(100),
-      auth.generateRandomSalt(100),
-      auth.generateRandomSalt(100),
-      auth.generateRandomSalt(100),
-      auth.generateRandomSalt(100),
-      auth.generateRandomSalt(100),
-      auth.generateRandomSalt(100),
-      auth.generateRandomSalt(100)];
-
-    res.render('salts', {
-      title: 'random salts',
-      isauthenticated: req.session.isauthenticated,
-      salts: salts
-    })
-  } else {
-    res.redirect('/');
-  }
-});
-
 // home
 router.get('/', (req, res, next) => {
   pd.getAllPublishedLastThirtyDays(function (err, lastThirtyDays) {

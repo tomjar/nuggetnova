@@ -18,16 +18,6 @@ var Auth = {
     },
 
     /**
-    * @description generates random string of characters i.e salt
-    * @param {number} length - Length of the random string.
-    */
-    generateRandomSalt: function (length) {
-        return crypto.randomBytes(Math.ceil(length / 2))
-            .toString('hex')
-            .slice(0, length);
-    },
-
-    /**
      * @description validates the super secret password
      * @param {String} password the attempted password
      * @param {Object} db 

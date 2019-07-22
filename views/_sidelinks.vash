@@ -14,7 +14,6 @@
           <div class="dropdown-menu" aria-labelledby="navbarDropdown">
             <a class="dropdown-item" href="/post/">posts</a>
             <a class="dropdown-item" href="/post/add">add new post</a>
-            <a class="dropdown-item" href='/salts'>random salts</a>
           </div>
         </li>
       </ul>
