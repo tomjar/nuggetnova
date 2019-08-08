@@ -1,0 +1,21 @@
+@html.extend('layout', function(model) {
+  @html.block('content', function(model) {
+    <h1>@model.title</h1>
+        <table class="table">
+      <tr>
+        <th>create timestamp</th>
+        <th>ip address</th>
+        <th>body</th>
+        <th>created by</th>
+      </tr>
+    @model.messages.forEach(function(item){
+      <tr>
+	    <td>@item.createtimestamp</td>
+        <td>@item.ip_address</td>
+        <td>@item.body</td>
+        <td>@item.createdby</td>
+      </tr>
+    })
+    </table>
+  })
+})

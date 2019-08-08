@@ -8,6 +8,7 @@ var logger = require('morgan');
 var indexRouter = require('./routes/index.js');
 var postsRouter = require('./routes/post.js');
 var publishedRouter = require('./routes/published.js');
+var adminRouter = require('./routes/admin.js');
 
 var app = express();
 app.set('trust proxy', 1) // trust first proxy
@@ -48,6 +49,7 @@ app.use('/javascripts', express.static(__dirname + '/node_modules/trumbowyg/dist
 app.use('/', indexRouter);
 app.use('/post', postsRouter);
 app.use('/p', publishedRouter);
+app.use('/admin', adminRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

@@ -4,7 +4,7 @@
 
     <div>
       <p>
-        <img src="/images/profilepic_updated.JPG" alt="thomas reese" height="110px" />
+        <img src="/images/profilepic_updated.JPG" alt="thomas reese" height="410px" />
       </p>
       
       <p>
@@ -16,18 +16,20 @@
         The source code for this website can be found <a href="https://github.com/tomjar/nuggetnova" target="_blank">here</a>.
       </p>
 
-      <p>
-        <a href="https://github.com/tomjar" target="_blank" title="Thomas Reese's github">github</a>
-      </p>
-      <p>
-        <a href="https://www.linkedin.com/in/thomas-reese-acc5b17" target="_blank" title="Thomas Reese's linkedin">linkedin</a>
-      </p>
-      <p>
-        <a href="https://www.strava.com/athletes/24684389" target="_blank" title="Thomas Reese's strava">strava</a>
-      </p>
-      <p>
-        <a href="https://setiathome.berkeley.edu" target="_blank" title="SETI@@home">SETI@@home</a>
-      </p>
+    <ul class="list-group">
+      <li class="list-group-item flex-fill border-0">
+          <a href="https://github.com/tomjar" target="_blank" title="Thomas Reese's github">github</a>
+      </li>
+      <li class="list-group-item flex-fill border-0">
+          <a href="https://www.linkedin.com/in/tjr-dingo" target="_blank" title="Thomas Reese's linkedin">linkedin</a>
+      </li>
+      <li class="list-group-item flex-fill border-0">
+        <a href="https://strava.com/athletes/24684389/" target="_blank" title="Thomas Reese's strava">strava</a>
+      </li>
+      <li class="list-group-item flex-fill border-0">
+          <a href="https://setiathome.berkeley.edu" target="_blank" title="SETI@@home">SETI@@home</a>
+      </li>
+      </ul>
     </div>
 
     @html.block('archive', function(model){

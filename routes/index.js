@@ -57,7 +57,7 @@ router.get('/login', (req, res, next) => {
     res.redirect('../');
   } else {
     // TODO: check if user in the naughty list
-    res.render('login', { title: 'Login' });
+    res.render('login', { title: 'login' });
   }
 }).post('/login', (req, res, next) => {
   if (req.session.lockout) {
