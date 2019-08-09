@@ -83,20 +83,29 @@ router.get('/message', (req, res, next) => {
     }
   })
 }).post('/message/add', (req, res, next) => {
-  let messageCreatedby = req.body.messageCreatedby,
+  let messageCreatedby = req.body.messageCreatedby === '' ? 'anonymous' : req.body.messageCreatedby,
     messageBody = req.body.messageBody,
     ipAddress = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
 
-  md.insertMessage(ipAddress, messageBody, messageCreatedby, function (err) {
-    if (err) {
-      return next(err);
-    } else {
-      res.redirect('/');
-    }
-  })
+  // TODO: add check logic on front end as well
+  if (messageBody.trim() === '') {
+    res.redirect('../message'); // fail, TODO: show error message?
+  }
+  else if (messageCreatedby.length > 100) {
+    res.redirect('../message'); // fail, TODO: show error message?
+  }
+  else if (messageBody.length > 512) {
+    res.redirect('../message'); // fail, TODO: show error message?
+  } else {
+    md.insertMessage(ipAddress, messageBody, messageCreatedby, function (err) {
+      if (err) {
+        return next(err);
+      } else {
+        res.redirect('../');
+      }
+    })
+  }
 });
-
-
 
 // logout
 router.get('/logout', (req, res, next) => {
@@ -130,7 +139,7 @@ router.get('/login', (req, res, next) => {
       } else {
         req.session.lockout = true;
 
-        let description = 'It appears someone attempted to login to the website but failed and locked themselves out.',
+        let description = 'It appears someone attempted to login to the website and failed.',
           category = 'login failure', // TODO: event category enum
           ipAddress = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
 
