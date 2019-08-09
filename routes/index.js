@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var auth = require('../data/auth.js');
 var pd = require('../data/post.js');
+var sd = require('../data/settings.js');
 
 // home
 router.get('/', (req, res, next) => {
@@ -27,15 +28,37 @@ router.get('/', (req, res, next) => {
 
 // about
 router.get('/about', (req, res, next) => {
-  pd.getAllArchived(function (err, yearAndPosts) {
+  let aboutViewModel = {
+    'title': 'about',
+    'about_section': '',
+    'isauthenticated': req.session.isauthenticated,
+    'yearAndPosts': []
+  };
+
+  sd.getSettings(function (err, settings) {
     if (err) {
       return next(err);
     } else {
-      res.render('about', {
-        'title': 'about',
-        'isauthenticated': req.session.isauthenticated,
-        'yearAndPosts': yearAndPosts
-      });
+      pd.getAllArchived(function (err, yearAndPosts) {
+        if (err) {
+          return next(err);
+        } else {
+          aboutViewModel.yearAndPosts = yearAndPosts;
+          try {
+            aboutViewModel.about_section = settings.about_section;
+          } catch (excep) {
+            sd.insertDefaultSettings(function (err, result) {
+              if (err) {
+                return next(err);
+              } else {
+                aboutViewModel.about_section = result.defaultSettings[1];
+              }
+            })
+          } finally {
+            res.render('about', aboutViewModel);
+          }
+        }
+      })
     }
   })
 });

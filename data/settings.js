@@ -9,7 +9,7 @@ var SettingsData = {
                 if (err) {
                     callback(err, null);
                 } else {
-                    callback(err, qres);
+                    callback(null, qres);
                 }
             })
     },
@@ -19,13 +19,21 @@ var SettingsData = {
                 if (err) {
                     callback(err, null);
                 } else {
+                    let data = qres.rows[0];
+                    callback(null, data);
+                }
+            })
+    },
+    insertDefaultSettings: function (callback) {
+        let defaultSettings = ['date', 'TODO, fill out your about section in the admin settings page.'];
+        db.query('INSERT INTO nn."Settings"(id, archive_view, about_section) '
+            + 'VALUES (uuid_generate_v1(), $1, $2);',
+            defaultSettings, (err, qres) => {
+                if (err) {
+                    callback(err, null);
+                } else {
 
-                    if (qres.rows.length <= 0) {
-                        callback(null, { 'archive_view': '', 'about_section': '' });
-                    } else {
-                        let data = qres.rows[0];
-                        callback(null, data);
-                    }
+                    callback(null, { 'defaultSettings': defaultSettings, 'result': qres });
                 }
             })
     }

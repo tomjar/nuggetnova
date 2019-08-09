@@ -1,37 +1,7 @@
 @html.extend('layout', function(model) {
   @html.block('content', function(model) {
     <h1>@model.title</h1>
-
-    <div>
-      <p>
-        <img src="/images/profilepic_updated.JPG" alt="thomas reese" height="410px" />
-      </p>
-      
-      <p>
-        Hello my name is Thomas Reese and welcome. The purpose of this website to share things on my mind, talk a little bit about myself, 
-        and express my opinion on the world. This website you are viewing was built with 
-        <a href="https://nodejs.org/en/" target="_blank">nodejs</a>, <a href ="https://github.com/expressjs/" target="_blank">expressjs</a>, 
-        <a href="https://www.postgresql.org/" target="_blank">PostgreSQL</a>. The frontend uses <a href="https://getbootstrap.com" target="_blank">Bootstrap</a>, 
-        and the <a href="https://github.com/kirbysayshi/vash" target="_blank">vash template engine</a>. 
-        The source code for this website can be found <a href="https://github.com/tomjar/nuggetnova" target="_blank">here</a>.
-      </p>
-
-    <ul class="list-group">
-      <li class="list-group-item flex-fill border-0">
-          <a href="https://github.com/tomjar" target="_blank" title="Thomas Reese's github">github</a>
-      </li>
-      <li class="list-group-item flex-fill border-0">
-          <a href="https://www.linkedin.com/in/tjr-dingo" target="_blank" title="Thomas Reese's linkedin">linkedin</a>
-      </li>
-      <li class="list-group-item flex-fill border-0">
-        <a href="https://strava.com/athletes/24684389/" target="_blank" title="Thomas Reese's strava">strava</a>
-      </li>
-      <li class="list-group-item flex-fill border-0">
-          <a href="https://setiathome.berkeley.edu" target="_blank" title="SETI@@home">SETI@@home</a>
-      </li>
-      </ul>
-    </div>
-
+    @html.raw(model.about_section)
     @html.block('archive', function(model){
       @html.include('archive', model)
     })
