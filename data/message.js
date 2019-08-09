@@ -22,6 +22,18 @@ var MessageData = {
 
             callback(null, all);
         })
+    },
+    insertMessage: function (ipaddress, body, createdby, callback) {
+        let params = [ipaddress, body, createdby];
+        db.query('INSERT INTO nn."Message"(id, ip_address, body, createtimestamp, createdby)'
+            + 'VALUES (uuid_generate_v1(), $1, $2, now(), $3);',
+            params, (err, qres) => {
+                if (err) {
+                    callback(err, null);
+                } else {
+                    callback(null, qres);
+                }
+            })
     }
 }
 

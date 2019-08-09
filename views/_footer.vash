@@ -1,5 +1,12 @@
-<footer id="sticky-footer" class="footer fixed-bottom">
+<footer id="sticky-footer" class="footer fixed-bottom bg-dark">
   <div class="container-fluid text-center">
-    <small><a href="/about">about</a></small>
+    <ul class="list-group">
+      <li class="list-group-item bg-dark border-0">
+          <small><a href="/about">about</a></small>
+      </li>
+      <li class="list-group-item bg-dark border-0">
+          <small><a href="/message">contact</a></small>
+      </li>
+      </ul>
   </div>
 </footer>

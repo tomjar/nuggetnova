@@ -13,11 +13,18 @@
                 @item.header
               </a>
               <p class="card-text">@item.description</p>
-                <i style="font-size:xx-small;">published on @item.createtimestamp UTC</i>
-                <br />
-                @if (item.modifytimestamp) {
-                  <i style="font-size:xx-small;">last updated on @item.modifytimestamp UTC</i>
-                }
+                  <ul class="list-group list-group-horizontal">
+                    <li class="list-group-item border-0">
+                        <a href="/about" style="font-size:xx-small">by Thomas Reese</a>
+                    </li>
+                    <li class="list-group-item border-0">
+                        <i style="font-size:xx-small;">first published on @item.createtimestamp UTC</i>
+                        <br />
+                                @if (item.modifytimestamp) {
+                      <i style="font-size:xx-small;">last updated on @item.modifytimestamp UTC</i>
+                      }
+                    </li>
+                    </ul>
             </div>
         </div>
       </div>

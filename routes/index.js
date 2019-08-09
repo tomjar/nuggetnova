@@ -3,6 +3,8 @@ var router = express.Router();
 var auth = require('../data/auth.js');
 var pd = require('../data/post.js');
 var sd = require('../data/settings.js');
+var md = require('../data/message.js');
+var ed = require('../data/event.js');
 
 // home
 router.get('/', (req, res, next) => {
@@ -63,6 +65,39 @@ router.get('/about', (req, res, next) => {
   })
 });
 
+// message
+router.get('/message', (req, res, next) => {
+  let messageViewModel = {
+    'title': 'send message',
+    'isauthenticated': req.session.isauthenticated,
+    'yearAndPosts': []
+  };
+
+  pd.getAllArchived(function (err, yearAndPosts) {
+    if (err) {
+      return next(err);
+    } else {
+      messageViewModel.yearAndPosts = yearAndPosts;
+      console.log(messageViewModel);
+      res.render('message', messageViewModel);
+    }
+  })
+}).post('/message/add', (req, res, next) => {
+  let messageCreatedby = req.body.messageCreatedby,
+    messageBody = req.body.messageBody,
+    ipAddress = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+
+  md.insertMessage(ipAddress, messageBody, messageCreatedby, function (err) {
+    if (err) {
+      return next(err);
+    } else {
+      res.redirect('/');
+    }
+  })
+});
+
+
+
 // logout
 router.get('/logout', (req, res, next) => {
   req.session.destroy(function (err) {
@@ -94,11 +129,18 @@ router.get('/login', (req, res, next) => {
         res.redirect('../');
       } else {
         req.session.lockout = true;
-        // TODO: log it
-        // TODO: lock out of login page
-        // TODO: warn the user
-        // TODO: add to naughty list
-        res.redirect('../');
+
+        let description = 'It appears someone attempted to login to the website but failed and locked themselves out.',
+          category = 'login failure', // TODO: event category enum
+          ipAddress = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+
+        ed.insertEvent(ipAddress, category, description, function (err, result) {
+          if (err) {
+            return next(err);
+          } else {
+            res.redirect('../');
+          }
+        });
       }
     });
   }
