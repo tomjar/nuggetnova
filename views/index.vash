@@ -4,27 +4,30 @@
 
     <div class="d-flex flex-wrap flex-row bd-highlight mb-3">
       @model.posts.forEach(function(item){
-          <div class="p-2 bd-highlight">
+          <div class="p-1 bd-highlight">
           <div class="card">
             <div class="card-body">
               <h3 class="card-title"></h3>
-              <a href="/post/view/@item.name">
-                <img class="rounded" src="@item.categoryImg" alt="@item.category" height="100px"/>
-                @item.header
-              </a>
-              <p class="card-text">@item.description</p>
-                  <ul class="list-group list-group-horizontal">
-                    <li class="list-group-item border-0">
-                        <a href="/about" style="font-size:xx-small">by Thomas Reese</a>
-                    </li>
-                    <li class="list-group-item border-0">
-                        <i style="font-size:xx-small;">first published on @item.createtimestamp UTC</i>
-                        <br />
-                                @if (item.modifytimestamp) {
-                      <i style="font-size:xx-small;">last updated on @item.modifytimestamp UTC</i>
-                      }
-                    </li>
-                    </ul>
+              <span>
+                <a href="/post/view/@item.name" title='@item.description' >
+                  @item.header
+                </a>
+              </span>
+              <br />
+              <span>
+                <ul class="list-group list-group-horizontal">
+                  <li class="list-group-item border-0">
+                     <span style="font-size:xx-small">by <a href="/about" >Thomas Reese</a></span>
+                  </li>
+                  <li class="list-group-item border-0">
+                      <i style="font-size:xx-small;">first published on @item.createtimestamp UTC</i>
+                      <br />
+                              @if (item.modifytimestamp) {
+                    <i style="font-size:xx-small;">last updated on @item.modifytimestamp UTC</i>
+                    }
+                  </li>
+                </ul>
+              </span>
             </div>
         </div>
       </div>

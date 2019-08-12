@@ -1,6 +1,9 @@
 var express = require('express');
 var router = express.Router();
 var pd = require('../data/post.js');
+var ece = require('../data/eventcategoryenum.js');
+var pce = require('../data/postcategoryenum.js');
+
 
 // index
 router.get('/', (req, res, next) => {
@@ -28,12 +31,12 @@ router.get('/add', (req, res, next) => {
       'title': 'add new post',
       'isauthenticated': req.session.isauthenticated,
       'categories': [
-        { 'value': 'bicycle', 'name': 'bicycle' },
-        { 'value': 'code', 'name': 'code' },
-        { 'value': 'gaming', 'name': 'gaming' },
-        { 'value': 'hardware', 'name': 'hardware' },
-        { 'value': 'life', 'name': 'life' },
-        { 'value': 'review', 'name': 'review' }
+        { 'value': pce.Bicycle.toLowerCase(), 'name': pce.Bicycle.toLowerCase() },
+        { 'value': pce.Code.toLowerCase(), 'name': pce.Code.toLowerCase() },
+        { 'value': pce.Gaming.toLowerCase(), 'name': pce.Gaming.toLowerCase() },
+        { 'value': pce.Hardware.toLowerCase(), 'name': pce.Hardware.toLowerCase() },
+        { 'value': pce.Life.toLowerCase(), 'name': pce.Life.toLowerCase() },
+        { 'value': pce.Review.toLowerCase(), 'name': pce.Review.toLowerCase() }
       ]
     });
   } else {
@@ -77,12 +80,12 @@ router.get('/update/:id', (req, res, next) => {
           'category': post.category,
           'body': post.body,
           'categories': [
-            { 'value': 'bicycle', 'name': 'bicycle' },
-            { 'value': 'code', 'name': 'code' },
-            { 'value': 'gaming', 'name': 'gaming' },
-            { 'value': 'hardware', 'name': 'hardware' },
-            { 'value': 'life', 'name': 'life' },
-            { 'value': 'review', 'name': 'review' }
+            { 'value': pce.Bicycle.toLowerCase(), 'name': pce.Bicycle.toLowerCase() },
+            { 'value': pce.Code.toLowerCase(), 'name': pce.Code.toLowerCase() },
+            { 'value': pce.Gaming.toLowerCase(), 'name': pce.Gaming.toLowerCase() },
+            { 'value': pce.Hardware.toLowerCase(), 'name': pce.Hardware.toLowerCase() },
+            { 'value': pce.Life.toLowerCase(), 'name': pce.Life.toLowerCase() },
+            { 'value': pce.Review.toLowerCase(), 'name': pce.Review.toLowerCase() }
           ]
         };
 

@@ -13,11 +13,12 @@
   <script src="/javascripts/umd/popper.js"></script>
   <script src="/javascripts/bootstrap.js"></script>
   <script src="/javascripts/trumbowyg.js"></script>
+  <script src="/javascripts/nuggetnova.js"></script>
 </head> 
 
 <body>
   <div class="container-fluid">
-    <div class="row content">
+    <div class="row content p-3">
       <div class="col-sm-3 sidenav">
         @html.include('_sidelinks', model)
         @html.block('archive')

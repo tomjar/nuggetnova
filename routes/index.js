@@ -5,6 +5,7 @@ var pd = require('../data/post.js');
 var sd = require('../data/settings.js');
 var md = require('../data/message.js');
 var ed = require('../data/event.js');
+var enm = require('../data/eventcategoryenum.js');
 
 // home
 router.get('/', (req, res, next) => {
@@ -78,7 +79,6 @@ router.get('/message', (req, res, next) => {
       return next(err);
     } else {
       messageViewModel.yearAndPosts = yearAndPosts;
-      console.log(messageViewModel);
       res.render('message', messageViewModel);
     }
   })
@@ -140,7 +140,7 @@ router.get('/login', (req, res, next) => {
         req.session.lockout = true;
 
         let description = 'It appears someone attempted to login to the website and failed.',
-          category = 'login failure', // TODO: event category enum
+          category = enm.LoginFailure.toString(),
           ipAddress = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
 
         ed.insertEvent(ipAddress, category, description, function (err, result) {

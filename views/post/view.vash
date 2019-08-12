@@ -4,18 +4,19 @@
 
     <ul class="list-group list-group-horizontal">
       <li class="list-group-item border-0">
-          <a href="/about" style="font-size:xx-small">by Thomas Reese</a>
+          <span style="font-size:xx-small">by <a href="/about" >Thomas Reese</a></span>
       </li>
       <li class="list-group-item border-0">
-          <i style="font-size:xx-small;">first published on @model.post.createtimestamp UTC</i>
+      <span style="font-size:xx-small;">
+          <i>first published on @model.post.createtimestamp UTC</i>
           <br />
                   @if (model.post.modifytimestamp) {
-        <i style="font-size:xx-small;">last updated on @model.post.modifytimestamp UTC</i>
+        <i>last updated on @model.post.modifytimestamp UTC</i>
         }
+        </span>
       </li>
       </ul>
     <p>
-      <br />
     </p>
     @html.raw(model.post.body)
   })
