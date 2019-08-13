@@ -15,7 +15,8 @@ router.get('/', (req, res, next) => {
                 res.render('admin/index', {
                     'title': 'events',
                     'isauthenticated': req.session.isauthenticated,
-                    'events': events
+                    'events': events,
+                    'toastr_messages': req.session.toastr_messages
                 })
             }
         })
@@ -91,6 +92,7 @@ router.get('/settings', (req, res, next) => {
             if (err) {
                 return next(err);
             } else {
+                req.session.toastr_messages = ['The settings where successfully updated!'];
                 res.redirect('/');
             }
         });

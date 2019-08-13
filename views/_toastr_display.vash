@@ -1,0 +1,10 @@
+
+@if(model.toastr_messages){
+
+
+<script>
+    @model.toastr_messages.forEach(function(item){
+      NuggetNova.showToastrMessage('success', item);
+  })
+</script>
+}

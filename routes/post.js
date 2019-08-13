@@ -1,7 +1,6 @@
 var express = require('express');
 var router = express.Router();
 var pd = require('../data/post.js');
-var ece = require('../data/eventcategoryenum.js');
 var pce = require('../data/postcategoryenum.js');
 
 
@@ -113,8 +112,6 @@ router.get('/update/:id', (req, res, next) => {
       if (err) {
         return next(err);
       } else {
-        console.log('update result...');
-        console.log(result);
         res.redirect('/');
       }
     });
