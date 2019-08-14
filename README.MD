@@ -21,7 +21,126 @@
   * $ sudo apt-get install postgresql
   * $ setup the postgres account and password (TODO)
   * run this SQL script to get your database set up
-    * TODO: script here 
+  
+<pre><code>
+-- Database: "nuggetnova-db"
+
+-- DROP DATABASE "nuggetnova-db";
+
+CREATE DATABASE "nuggetnova-db"
+  WITH OWNER = postgres
+       ENCODING = 'UTF8'
+       TABLESPACE = pg_default
+       LC_COLLATE = 'en_US.UTF-8'
+       LC_CTYPE = 'en_US.UTF-8'
+       CONNECTION LIMIT = -1;
+
+       -- Schema: nn
+
+-- DROP SCHEMA nn;
+
+CREATE SCHEMA nn
+  AUTHORIZATION postgres;
+
+COMMENT ON SCHEMA nn
+  IS 'this schema is for nuggetnova';
+
+  -- Table: nn."Event"
+
+-- DROP TABLE nn."Event";
+
+CREATE TABLE nn."Event"
+(
+  id uuid NOT NULL,
+  ip_address character varying(80) NOT NULL,
+  category character varying(20) NOT NULL,
+  description text NOT NULL,
+  createtimestamp timestamp with time zone NOT NULL,
+  CONSTRAINT "Event_pkey" PRIMARY KEY (id)
+)
+WITH (
+  OIDS=FALSE
+);
+ALTER TABLE nn."Event"
+  OWNER TO postgres;
+
+  -- Table: nn."Message"
+
+-- DROP TABLE nn."Message";
+
+CREATE TABLE nn."Message"
+(
+  id uuid NOT NULL,
+  ip_address character varying(80) NOT NULL,
+  body character varying(512) NOT NULL,
+  createtimestamp timestamp with time zone NOT NULL,
+  createdby character varying(100),
+  CONSTRAINT "Message_pkey" PRIMARY KEY (id)
+)
+WITH (
+  OIDS=FALSE
+);
+ALTER TABLE nn."Message"
+  OWNER TO postgres;
+
+  -- Table: nn."Post"
+
+-- DROP TABLE nn."Post";
+
+CREATE TABLE nn."Post"
+(
+  id uuid NOT NULL,
+  header character varying(150) NOT NULL,
+  createtimestamp timestamp with time zone NOT NULL,
+  modifytimestamp timestamp with time zone,
+  ispublished boolean NOT NULL,
+  description character varying(250) NOT NULL,
+  name character varying(50) NOT NULL,
+  category character varying(50),
+  body text NOT NULL DEFAULT ''::text,
+  CONSTRAINT "Post_pkey" PRIMARY KEY (id)
+)
+WITH (
+  OIDS=FALSE
+);
+ALTER TABLE nn."Post"
+  OWNER TO postgres;
+
+  -- Table: nn."Settings"
+
+-- DROP TABLE nn."Settings";
+
+CREATE TABLE nn."Settings"
+(
+  id uuid NOT NULL,
+  archive_view character varying(30) NOT NULL,
+  about_section text NOT NULL,
+  CONSTRAINT "Settings_pkey" PRIMARY KEY (id)
+)
+WITH (
+  OIDS=FALSE
+);
+ALTER TABLE nn."Settings"
+  OWNER TO postgres;
+
+-- Table: nn."Supersecretpassword"
+
+-- DROP TABLE nn."Supersecretpassword";
+
+CREATE TABLE nn."Supersecretpassword"
+(
+  key character varying(512) NOT NULL,
+  salt character varying(256),
+  id uuid NOT NULL,
+  CONSTRAINT "Supersecretpassword_pkey" PRIMARY KEY (id)
+)
+WITH (
+  OIDS=FALSE
+);
+ALTER TABLE nn."Supersecretpassword"
+  OWNER TO postgres;
+</code></pre>
+
   * check out this project
   * set the *dev.index.js* file to the correct local credentials of your PostgreSQL primary account
   * run this command to start the application
