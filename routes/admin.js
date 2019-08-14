@@ -4,6 +4,7 @@ var auth = require('../data/auth.js');
 var ed = require('../data/event.js');
 var sd = require('../data/settings.js');
 var md = require('../data/message.js');
+var tte = require('../data/toastrtypeenum.js');
 
 // home (events)
 router.get('/', (req, res, next) => {
@@ -94,7 +95,11 @@ router.get('/settings', (req, res, next) => {
             if (err) {
                 return next(err);
             } else {
-                req.session.toastr_messages = ['The settings where successfully updated!'];
+                req.session.toastr_messages = JSON.stringify(
+                    [
+                        { type: tte.Success, msg: 'The settings, where successfully updated!' },
+                        { type: tte.Info, msg: 'hello' }]
+                );
                 res.redirect('/admin/settings');
             }
         });
