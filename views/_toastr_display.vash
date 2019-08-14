@@ -3,8 +3,12 @@
 
 
 <script>
-    @model.toastr_messages.forEach(function(item){
-      NuggetNova.showToastrMessage('success', item);
+  $( document ).ready(function() {
+    let toastrMessages = '@model.toastr_messages';
+    NuggetNova.showToastrMessage('success', toastrMessages);
   })
+  //   toastrMessages.forEach(function(item){
+  //     NuggetNova.showToastrMessage('success', item);
+  // })
 </script>
 }

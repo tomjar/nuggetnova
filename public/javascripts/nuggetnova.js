@@ -6,8 +6,6 @@ var NuggetNova = {
         Error: 'error'
     },
     showToastrMessage: function (type, message) {
-        alert('hello');
-        toastr['success']('hello');
-        return '';
+        return toastr[type](message);
     }
 };

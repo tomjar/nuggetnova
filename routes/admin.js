@@ -55,7 +55,8 @@ router.get('/settings', (req, res, next) => {
             'archive_view_categories': [
                 { 'value': 'category', 'name': 'category' },
                 { 'value': 'date', 'name': 'date' }
-            ]
+            ],
+            'toastr_messages': req.session.toastr_messages
         };
         sd.getSettings(function (err, settings) {
             if (err) {
@@ -76,7 +77,8 @@ router.get('/settings', (req, res, next) => {
                         }
                     })
                 } finally {
-                    res.render('admin/settings', settingsViewModel)
+                    req.session.toastr_messages = null;
+                    res.render('admin/settings', settingsViewModel);
                 }
             }
         })
@@ -93,11 +95,11 @@ router.get('/settings', (req, res, next) => {
                 return next(err);
             } else {
                 req.session.toastr_messages = ['The settings where successfully updated!'];
-                res.redirect('/');
+                res.redirect('/admin/settings');
             }
         });
     } else {
-        res.redirect('/');
+        res.redirect('/login');
     }
 });
 
