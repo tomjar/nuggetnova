@@ -6,8 +6,6 @@ var cookieParser = require('cookie-parser');
 var lessMiddleware = require('less-middleware');
 var logger = require('morgan');
 var indexRouter = require('./routes/index.js');
-var postsRouter = require('./routes/post.js');
-var publishedRouter = require('./routes/published.js');
 var adminRouter = require('./routes/admin.js');
 
 var app = express();
@@ -48,8 +46,6 @@ app.use('/javascripts', express.static(__dirname + '/node_modules/trumbowyg/dist
 app.use('/javascripts', express.static(__dirname + '/node_modules/toastr'));
 
 app.use('/', indexRouter);
-app.use('/post', postsRouter);
-app.use('/p', publishedRouter);
 app.use('/admin', adminRouter);
 
 // catch 404 and forward to error handler

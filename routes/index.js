@@ -5,7 +5,7 @@ var pd = require('../data/post.js');
 var sd = require('../data/settings.js');
 var md = require('../data/message.js');
 var ed = require('../data/event.js');
-var enm = require('../data/eventcategoryenum.js');
+var enm = require('../enums/eventcategoryenum.js');
 
 // home
 router.get('/', (req, res, next) => {
@@ -27,6 +27,54 @@ router.get('/', (req, res, next) => {
       })
     }
   })
+});
+
+// view
+router.get('/:name', (req, res, next) => {
+  let name = req.params.name.toLowerCase().trim(),
+    reservedPages = ['login', 'about', 'contact', 'logout'],
+    isReserved = reservedPages.find(function (element) {
+      return element === name;
+    });
+
+  if (typeof isReserved === 'undefined') {
+    console.log(isReserved);
+    pd.getPostByName(name, function (err, post) {
+      if (err) {
+        return next(err);
+      } else {
+        pd.getAllArchived(function (err, yearAndPosts) {
+          if (err) {
+            return next(err);
+          } else {
+
+            let viewmodel = {
+              'id': post.id,
+              'description': post.description,
+              'header': post.header,
+              'name': post.name,
+              'createtimestamp': post.createtimestamp.toLocaleString('en-US', { timeZone: 'UTC' }),
+              'modifytimestamp': post.modifytimestamp
+                ? post.modifytimestamp.toLocaleString('en-US', { timeZone: 'UTC' })
+                : '',
+              'category': post.category,
+              'body': post.body
+            };
+
+            res.render('post/view', {
+              title: viewmodel.header,
+              isauthenticated: req.session.isauthenticated,
+              post: viewmodel,
+              yearAndPosts: yearAndPosts
+            });
+          }
+        })
+      }
+    })
+  } else {
+    // continue and see if we can find the page requested
+    return next();
+  }
 });
 
 // about
@@ -66,8 +114,8 @@ router.get('/about', (req, res, next) => {
   })
 });
 
-// message
-router.get('/message', (req, res, next) => {
+// contact
+router.get('/contact', (req, res, next) => {
   let messageViewModel = {
     'title': 'send message',
     'isauthenticated': req.session.isauthenticated,
@@ -79,23 +127,23 @@ router.get('/message', (req, res, next) => {
       return next(err);
     } else {
       messageViewModel.yearAndPosts = yearAndPosts;
-      res.render('message', messageViewModel);
+      res.render('contact', messageViewModel);
     }
   })
-}).post('/message/add', (req, res, next) => {
+}).post('/contact/add', (req, res, next) => {
   let messageCreatedby = req.body.messageCreatedby === '' ? 'anonymous' : req.body.messageCreatedby,
     messageBody = req.body.messageBody,
     ipAddress = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
 
   // TODO: add check logic on front end as well
   if (messageBody.trim() === '') {
-    res.redirect('../message'); // fail, TODO: show error message?
+    res.redirect('../contact'); // fail, TODO: show error message?
   }
   else if (messageCreatedby.length > 100) {
-    res.redirect('../message'); // fail, TODO: show error message?
+    res.redirect('../contact'); // fail, TODO: show error message?
   }
   else if (messageBody.length > 512) {
-    res.redirect('../message'); // fail, TODO: show error message?
+    res.redirect('../contact'); // fail, TODO: show error message?
   } else {
     md.insertMessage(ipAddress, messageBody, messageCreatedby, function (err) {
       if (err) {

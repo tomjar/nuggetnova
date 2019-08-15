@@ -9,7 +9,7 @@
             <div class="card-body">
               <h3 class="card-title"></h3>
               <span>
-                <a href="/post/view/@item.name" title='@item.description' >
+                <a href="/@item.name" title='@item.description' >
                   @item.header
                 </a>
               </span>
@@ -22,8 +22,8 @@
                   <li class="list-group-item border-0">
                       <i style="font-size:xx-small;">first published on @item.createtimestamp UTC</i>
                       <br />
-                              @if (item.modifytimestamp) {
-                    <i style="font-size:xx-small;">last updated on @item.modifytimestamp UTC</i>
+                    @if (item.modifytimestamp) {
+                      <i style="font-size:xx-small;">last updated on @item.modifytimestamp UTC</i>
                     }
                   </li>
                 </ul>
@@ -35,6 +35,6 @@
       </div>
   })
   @html.block('archive', function(model){
-    @html.include('archive', model)
+    @html.include('_archive', model)
   })
 })

@@ -2,7 +2,7 @@
   @html.block('content', function(model) {
     <h1>@model.title</h1>
 
-    <form method="post" action="/message/add" id="formMessage">
+    <form method="post" action="/contact/add" id="formMessage">
       <div class="row">
         <div class="col-md-3">
           <label for="messageCreatedby" 
@@ -101,7 +101,7 @@
       });
     </script>
     @html.block('archive', function(model){
-      @html.include('archive', model)
+      @html.include('_archive', model)
     })
   })    
 })

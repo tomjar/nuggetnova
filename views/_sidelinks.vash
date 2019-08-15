@@ -15,8 +15,8 @@
             <a class="dropdown-item" href="/admin/">events</a>
             <a class="dropdown-item" href="/admin/messages">messages</a>
             <a class="dropdown-item" href="/admin/settings">settings</a>
-            <a class="dropdown-item" href="/post/">posts</a>
-            <a class="dropdown-item" href="/post/add">add new post</a>
+            <a class="dropdown-item" href="/admin/posts">posts</a>
+            <a class="dropdown-item" href="/admin/add">add new post</a>
           </div>
         </li>
       </ul>

@@ -21,6 +21,6 @@
     @html.raw(model.post.body)
   })
   @html.block('archive', function(model){
-    @html.include('archive', model)
+    @html.include('_archive', model)
   })
 })

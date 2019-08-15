@@ -61,17 +61,17 @@ var PostData = {
             })
     },
     getPostByName: function (name, callback) {
-        db.query('SELECT id, header, createtimestamp, modifytimestamp, ispublished, description, name, category, body FROM nn."Post" WHERE name=$1;',
+        db.query('SELECT id, header, createtimestamp, modifytimestamp, ispublished, description, name, category, body FROM nn."Post" WHERE lower(name)=$1;',
             [name], (err, qres) => {
                 if (err) {
                     callback(err, {});
                 } else {
                     let data = qres.rows[0];
 
-                    if (data.length <= 0) {
-                        callback('Not found', {});
-                    } else {
+                    if (data) {
                         callback(null, data);
+                    } else {
+                        callback('Not found', {});
                     }
                 }
             })
