@@ -189,7 +189,7 @@ router.get('/login', (req, res, next) => {
         req.session.isauthenticated = true;
         res.redirect('../');
       } else {
-        // req.session.lockout = true;
+        req.session.lockout = true;
 
         req.session.toastr_messages = JSON.stringify(
           [
