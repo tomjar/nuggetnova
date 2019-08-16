@@ -12,7 +12,9 @@
             administration
           </a>
           <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <a class="dropdown-item" href="/admin/">events</a>
+            <a class="dropdown-item" href="/admin/">dashboard</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="/admin/events">events</a>
             <a class="dropdown-item" href="/admin/messages">messages</a>
             <a class="dropdown-item" href="/admin/settings">settings</a>
             <a class="dropdown-item" href="/admin/posts">posts</a>

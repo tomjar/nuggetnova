@@ -6,6 +6,7 @@ var sd = require('../data/settings.js');
 var md = require('../data/message.js');
 var ed = require('../data/event.js');
 var enm = require('../enums/eventcategoryenum.js');
+var tte = require('../enums/toastrtypeenum.js');
 
 // home
 router.get('/', (req, res, next) => {
@@ -32,13 +33,12 @@ router.get('/', (req, res, next) => {
 // view
 router.get('/:name', (req, res, next) => {
   let name = req.params.name.toLowerCase().trim(),
-    reservedPages = ['login', 'about', 'contact', 'logout'],
+    reservedPages = ['login', 'about', 'contact', 'logout', 'admin'],
     isReserved = reservedPages.find(function (element) {
       return element === name;
     });
 
   if (typeof isReserved === 'undefined') {
-    console.log(isReserved);
     pd.getPostByName(name, function (err, post) {
       if (err) {
         return next(err);
@@ -171,31 +171,44 @@ router.get('/login', (req, res, next) => {
   if (req.session.lockout) {
     res.redirect('../');
   } else {
-    // TODO: check if user in the naughty list
-    res.render('login', { title: 'login' });
+    let tstrmsgs = req.session.toastr_messages;
+    req.session.toastr_messages = null;
+    res.render('login',
+      {
+        title: 'login',
+        'toastr_messages': tstrmsgs
+      });
   }
 }).post('/login', (req, res, next) => {
   if (req.session.lockout) {
     res.redirect('../');
   } else {
-    // TODO: check if user in the naughty list
     auth.validatePassword(req.body.secretKey, function (valid) {
       if (valid) {
         // welcome valid user
         req.session.isauthenticated = true;
         res.redirect('../');
       } else {
-        req.session.lockout = true;
+        // req.session.lockout = true;
+
+        req.session.toastr_messages = JSON.stringify(
+          [
+            {
+              type: tte.Warning,
+              msg: 'This failed login attempt has been logged.'
+            }
+          ]
+        );
 
         let description = 'It appears someone attempted to login to the website and failed.',
-          category = enm.LoginFailure.toString(),
+          category = enm.LoginFailure,
           ipAddress = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
 
         ed.insertEvent(ipAddress, category, description, function (err, result) {
           if (err) {
             return next(err);
           } else {
-            res.redirect('../');
+            res.redirect('../login');
           }
         });
       }

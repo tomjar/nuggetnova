@@ -11,19 +11,17 @@ var pce = require('../enums/postcategoryenum.js');
 // index admin dashboard
 router.get('/', (req, res, next) => {
     if (req.session.isauthenticated) {
-        ed.getAll(function (err, events) {
-            if (err) {
-                return next(err);
-            } else {
-                res.render('admin/index', {
-                    'title': 'events',
-                    'isauthenticated': req.session.isauthenticated,
-                    'events': events
-                })
-            }
-        })
+
+        let viewmodel = {
+            'title': 'admin dashboard',
+            'isauthenticated': req.session.isauthenticated
+        };
+
+        console.log(viewmodel);
+
+        res.render('admin/index', viewmodel);
     } else {
-        res.redirect('/');
+        res.redirect('../login');
     }
 });
 
@@ -194,6 +192,25 @@ router.get('/messages', (req, res, next) => {
     }
 });
 
+// events
+router.get('/events', (req, res, next) => {
+    if (req.session.isauthenticated) {
+        ed.getAll(function (err, events) {
+            if (err) {
+                return next(err);
+            } else {
+                res.render('admin/events', {
+                    'title': 'events',
+                    'isauthenticated': req.session.isauthenticated,
+                    'events': events
+                })
+            }
+        })
+    } else {
+        res.redirect('/login');
+    }
+});
+
 // settings
 router.get('/settings', (req, res, next) => {
     if (req.session.isauthenticated) {
@@ -222,8 +239,8 @@ router.get('/settings', (req, res, next) => {
                         if (err) {
                             return next(err);
                         } else {
-                            settingsViewModel.about_section = result.defaultSettings[1];
                             settingsViewModel.archive_view = result.defaultSettings[0];
+                            settingsViewModel.about_section = result.defaultSettings[1];
                         }
                     })
                 } finally {
@@ -246,7 +263,10 @@ router.get('/settings', (req, res, next) => {
             } else {
                 req.session.toastr_messages = JSON.stringify(
                     [
-                        { type: tte.Success, msg: 'The settings, where successfully updated!' }
+                        {
+                            type: tte.Success,
+                            msg: 'The settings, where successfully updated!'
+                        }
                     ]
                 );
                 res.redirect('/admin/settings');

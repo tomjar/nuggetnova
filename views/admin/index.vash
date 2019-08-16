@@ -2,11 +2,25 @@
   @html.block('content', function(model) {
     <h1>@model.title</h1>
 
-    <a class="dropdown-item" href="/admin/">events</a>
-    <a class="dropdown-item" href="/admin/messages">messages</a>
-    <a class="dropdown-item" href="/admin/settings">settings</a>
-    <a class="dropdown-item" href="/admin/posts">posts</a>
-    <a class="dropdown-item" href="/admin/add">add new post</a>
 
+<ul class="nav nav-tabs" id="myTab" role="tablist">
+  <li class="nav-item">
+    <a class="nav-link active" id="events-tab" data-toggle="tab" href="#events" role="tab" 
+    aria-controls="events" aria-selected="true">events</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" id="messages-tab" data-toggle="tab" href="#messages" role="tab" 
+    aria-controls="messages" aria-selected="false">messages</a>
+  </li>
+</ul>
+<div class="tab-content" id="myTabContent">
+  <div class="tab-pane fade show active" id="events" role="tabpanel" aria-labelledby="events-tab">
+
+  TODO:
+  </div>
+  <div class="tab-pane fade" id="messages" role="tabpanel" aria-labelledby="messages-tab">
+  TODO:
+  </div>
+</div>
   })
 })
