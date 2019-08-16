@@ -24,11 +24,11 @@
               Actions
             </button>
             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-              <a class="btn btn-default dropdown-item" href='/post/update/@item.id'>edit</a>
+              <a class="btn btn-default dropdown-item" href='/admin/update/@item.id'>edit</a>
               @if (item.ispublished){
-                <a class="btn btn-default dropdown-item" href='/post/deactivate/@item.id'>deactivate</a>
+                <a class="btn btn-default dropdown-item" href='/admin/deactivate/@item.id'>deactivate</a>
               }else{
-                <a class="btn btn-default dropdown-item" href='/post/activate/@item.id'>activate</a>
+                <a class="btn btn-default dropdown-item" href='/admin/activate/@item.id'>activate</a>
               }
             </div>
           </div>

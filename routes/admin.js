@@ -40,7 +40,7 @@ router.get('/posts', (req, res, next) => {
             }
         })
     } else {
-        res.redirect('/');
+        res.redirect('../login');
     }
 });
 
@@ -60,7 +60,7 @@ router.get('/add', (req, res, next) => {
             ]
         });
     } else {
-        res.redirect('/');
+        res.redirect('../login');
     }
 }).post('/add', (req, res, next) => {
     if (req.session.isauthenticated) {
@@ -78,7 +78,7 @@ router.get('/add', (req, res, next) => {
             }
         })
     } else {
-        res.redirect('/');
+        res.redirect('../login');
     }
 });
 
@@ -90,6 +90,9 @@ router.get('/update/:id', (req, res, next) => {
         pd.getPostById(id, function (err, post) {
             if (err) {
                 return next(err);
+            }
+            else if (typeof post === 'undefined') {
+                return next();
             } else {
                 let viewmodel = {
                     'id': post.id,
@@ -118,7 +121,7 @@ router.get('/update/:id', (req, res, next) => {
             }
         })
     } else {
-        res.redirect('/');
+        res.redirect('../login');
     }
 }).post('/update', (req, res, next) => {
     if (req.session.isauthenticated) {
@@ -137,7 +140,7 @@ router.get('/update/:id', (req, res, next) => {
             }
         });
     } else {
-        res.redirect('/');
+        res.redirect('../login');
     }
 });
 
@@ -153,7 +156,7 @@ router.get('/activate/:id', (req, res, next) => {
             }
         })
     } else {
-        res.redirect('/');
+        res.redirect('../login');
     }
 });
 
@@ -169,7 +172,7 @@ router.get('/deactivate/:id', (req, res, next) => {
             }
         })
     } else {
-        res.redirect('/');
+        res.redirect('../login');
     }
 });
 
@@ -188,7 +191,7 @@ router.get('/messages', (req, res, next) => {
             }
         })
     } else {
-        res.redirect('/');
+        res.redirect('../login');
     }
 });
 
@@ -207,7 +210,7 @@ router.get('/events', (req, res, next) => {
             }
         })
     } else {
-        res.redirect('/login');
+        res.redirect('../login');
     }
 });
 
@@ -250,7 +253,7 @@ router.get('/settings', (req, res, next) => {
             }
         })
     } else {
-        res.redirect('/');
+        res.redirect('../login');
     }
 }).post('/settings/update', (req, res, next) => {
     if (req.session.isauthenticated) {
@@ -273,7 +276,7 @@ router.get('/settings', (req, res, next) => {
             }
         });
     } else {
-        res.redirect('/login');
+        res.redirect('../login');
     }
 });
 

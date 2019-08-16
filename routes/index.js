@@ -38,10 +38,16 @@ router.get('/:name', (req, res, next) => {
       return element === name;
     });
 
-  if (typeof isReserved === 'undefined') {
+  if (typeof isReserved !== 'undefined') {
+    // continue and see if we can find the reserved page requested
+    return next();
+  } else {
     pd.getPostByName(name, function (err, post) {
       if (err) {
         return next(err);
+      }
+      else if (typeof post === 'undefined') {
+        return next();
       } else {
         pd.getAllArchived(function (err, yearAndPosts) {
           if (err) {
@@ -71,9 +77,6 @@ router.get('/:name', (req, res, next) => {
         })
       }
     })
-  } else {
-    // continue and see if we can find the page requested
-    return next();
   }
 });
 

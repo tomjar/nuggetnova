@@ -6,74 +6,39 @@ var PostData = {
     updatePostPublished: function (ispublished, id, callback) {
         db.query('UPDATE nn."Post" SET ispublished=$1, modifytimestamp=now() WHERE id = $2;',
             [ispublished, id], (err, qres) => {
-                if (err) {
-                    callback(err, null);
-                } else {
-                    callback(null, qres);
-                }
+                callback(err, qres);
             })
     },
     updatePostModifiedTimestamp: function (id, callback) {
         db.query('UPDATE nn."Post" SET modifytimestamp=now() WHERE id = $1;',
             [id], (err, qres) => {
-                if (err) {
-                    callback(err, null);
-                } else {
-                    callback(err, qres);
-                }
+                callback(err, qres);
             })
     },
     updatePost: function (category, header, ispublished, description, body, id, callback) {
         db.query('UPDATE nn."Post" SET category=$1, header=$2, modifytimestamp=now(), ispublished=$3, description=$4, body=$5 WHERE id = $6;',
             [category, header, ispublished, description, body, id], (err, qres) => {
-                if (err) {
-                    callback(err, null);
-                } else {
-                    callback(err, qres);
-                }
+                callback(err, qres);
             })
     },
     insertPost: function (header, description, name, category, body, callback) {
         db.query('INSERT INTO nn."Post"(id, header, createtimestamp, modifytimestamp, ispublished, description, name, category, body) '
             + 'VALUES (uuid_generate_v1(), $1, now(), NULL, false, $2, $3, $4, $5);',
             [header, description, name, category, body], (err, qres) => {
-                if (err) {
-                    callback(err, null);
-                } else {
-                    callback(null, qres);
-                }
+                callback(err, qres);
             })
     },
     getPostById: function (id, callback) {
         db.query('SELECT id, header, createtimestamp, modifytimestamp, ispublished, description, name, category, body FROM nn."Post" WHERE id=$1;',
             [id], (err, qres) => {
-                if (err) {
-                    callback(err, null);
-                } else {
-                    if (qres.rows.length <= 0) {
-                        callback('Not found', null);
-                    } else {
-                        let data = qres.rows[0];
-
-                        callback(null, data);
-                    }
-                }
+                let data = typeof qres === 'undefined' ? null : qres.rows[0];
+                callback(err, data);
             })
     },
     getPostByName: function (name, callback) {
         db.query('SELECT id, header, createtimestamp, modifytimestamp, ispublished, description, name, category, body FROM nn."Post" WHERE lower(name)=$1;',
             [name], (err, qres) => {
-                if (err) {
-                    callback(err, {});
-                } else {
-                    let data = qres.rows[0];
-
-                    if (data) {
-                        callback(null, data);
-                    } else {
-                        callback('Not found', {});
-                    }
-                }
+                callback(err, qres.rows[0]);
             })
     },
     getAll: function (callback) {
