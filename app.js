@@ -12,7 +12,7 @@ var app = express();
 app.set('trust proxy', 1) // trust first proxy
 
 var sess = {
-  secret: 'you apes wanna live forever',
+  secret: process.env.SESSION_SECRET,
   resave: false,
   saveUninitialized: true,
   cookie: {}
