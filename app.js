@@ -11,14 +11,16 @@ var adminRouter = require('./routes/admin.js');
 var app = express();
 app.set('trust proxy', 1) // trust first proxy
 
+var isProduction = process.env.ENVIRONMENT === 'production';
+
 var sess = {
-  secret: process.env.SESSION_SECRET,
+  secret: isProduction ? process.env.SESSION_SECRET : 'dev-secret',
   resave: false,
   saveUninitialized: true,
   cookie: {}
 }
 
-if (process.env.ENVIRONMENT === 'production') {
+if (isProduction) {
   app.set('trust proxy', 1) // trust first proxy
   sess.cookie.secure = true // serve secure cookies
 }

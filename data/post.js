@@ -3,6 +3,12 @@ var connection = require('../db/connection.js');
 const db = connection.getDataBaseConnection();
 
 var PostData = {
+    deletePostPermanently: function(id, callback){
+        db.query('DELETE FROM nn."Post" WHERE id = $1;',
+    [id], (err, qres) => {
+        callback(err, qres);
+    })
+    },
     updatePostPublished: function (ispublished, id, callback) {
         db.query('UPDATE nn."Post" SET ispublished=$1, modifytimestamp=now() WHERE id = $2;',
             [ispublished, id], (err, qres) => {

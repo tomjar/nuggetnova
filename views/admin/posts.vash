@@ -1,5 +1,8 @@
 @html.extend('layout', function(model) {
   @html.block('content', function(model) {
+    @html.block('_toastr_display', function(model){
+      @html.include('_toastr_display', model)
+    })
     <h1>@model.title</h1>
         <table class="table">
       <tr>
@@ -30,6 +33,7 @@
               }else{
                 <a class="btn btn-default dropdown-item" href='/admin/activate/@item.id'>activate</a>
               }
+                <a class="btn btn-danger dropdown-item" href='/admin/delete/@item.id'>delete</a>
             </div>
           </div>
         </td>
