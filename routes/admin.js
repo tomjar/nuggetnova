@@ -3,7 +3,6 @@ var router = express.Router();
 var auth = require('../data/auth.js');
 var ed = require('../data/event.js');
 var sd = require('../data/settings.js');
-var md = require('../data/message.js');
 var pd = require('../data/post.js');
 var tte = require('../enums/toastrtypeenum.js');
 var pce = require('../enums/postcategoryenum.js');
@@ -16,8 +15,6 @@ router.get('/', (req, res, next) => {
             'title': 'admin dashboard',
             'isauthenticated': req.session.isauthenticated
         };
-
-        console.log(viewmodel);
 
         res.render('admin/index', viewmodel);
     } else {
@@ -32,11 +29,14 @@ router.get('/posts', (req, res, next) => {
             if (err) {
                 return next(err);
             } else {
-                res.render('admin/posts', {
+                var allPostsViewModel = {
                     title: 'all posts',
                     isauthenticated: req.session.isauthenticated,
-                    posts: all
-                });
+                    posts: all,
+                    toastr_messages: req.session.toastr_messages
+                };
+                req.session.toastr_messages = null;
+                res.render('admin/posts', allPostsViewModel);
             }
         })
     } else {
@@ -74,7 +74,15 @@ router.get('/add', (req, res, next) => {
             if (err) {
                 return next(err);
             } else {
-                res.redirect('/post');
+                req.session.toastr_messages = JSON.stringify(
+                    [
+                        {
+                            type: tte.Success,
+                            msg: `The post ${postName} was added!`
+                        }
+                    ]
+                );
+                res.redirect('/admin/posts');
             }
         })
     } else {
@@ -136,7 +144,15 @@ router.get('/update/:id', (req, res, next) => {
             if (err) {
                 return next(err);
             } else {
-                res.redirect('/');
+                req.session.toastr_messages = JSON.stringify(
+                    [
+                        {
+                            type: tte.Success,
+                            msg: `The post ${postId} was updated!`
+                        }
+                    ]
+                );
+                res.redirect('/admin/posts');
             }
         });
     } else {
@@ -152,7 +168,15 @@ router.get('/activate/:id', (req, res, next) => {
             if (err) {
                 return next(err);
             } else {
-                res.redirect('/post');
+                req.session.toastr_messages = JSON.stringify(
+                    [
+                        {
+                            type: tte.Success,
+                            msg: `The post ${id} was activated!`
+                        }
+                    ]
+                );
+                res.redirect('/admin/posts');
             }
         })
     } else {
@@ -168,7 +192,15 @@ router.get('/deactivate/:id', (req, res, next) => {
             if (err) {
                 return next(err);
             } else {
-                res.redirect('/post');
+                req.session.toastr_messages = JSON.stringify(
+                    [
+                        {
+                            type: tte.Warning,
+                            msg: `The post ${id} was deactivated!`
+                        }
+                    ]
+                );
+                res.redirect('/admin/posts');
             }
         })
     } else {
@@ -176,24 +208,30 @@ router.get('/deactivate/:id', (req, res, next) => {
     }
 });
 
-// messages
-router.get('/messages', (req, res, next) => {
+// delete permanently
+router.get('/delete/:id', (req, res, next) => {
     if (req.session.isauthenticated) {
-        md.getAll(function (err, messages) {
+        let id = req.params.id;
+        pd.deletePostPermanently(id, function (err, result) {
             if (err) {
                 return next(err);
             } else {
-                res.render('admin/messages', {
-                    'title': 'messages',
-                    'isauthenticated': req.session.isauthenticated,
-                    'messages': messages
-                })
+                req.session.toastr_messages = JSON.stringify(
+                    [
+                        {
+                            type: tte.Error,
+                            msg: `The post ${id} was permanently deleted!`
+                        }
+                    ]
+                );
+                res.redirect('/admin/posts');
             }
         })
     } else {
         res.redirect('../login');
     }
 });
+
 
 // events
 router.get('/events', (req, res, next) => {
@@ -268,7 +306,7 @@ router.get('/settings', (req, res, next) => {
                     [
                         {
                             type: tte.Success,
-                            msg: 'The settings, where successfully updated!'
+                            msg: 'The settings were successfully updated!'
                         }
                     ]
                 );

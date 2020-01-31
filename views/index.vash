@@ -1,5 +1,8 @@
 @html.extend('layout', function(model) {
   @html.block('content', function(model) {
+    @html.block('_toastr_display', function(model){
+      @html.include('_toastr_display', model)
+    })
     <h1 title="last 30 days">@model.title</h1>
 
     <div class="d-flex flex-wrap flex-row bd-highlight mb-3">

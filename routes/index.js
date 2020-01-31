@@ -3,7 +3,6 @@ var router = express.Router();
 var auth = require('../data/auth.js');
 var pd = require('../data/post.js');
 var sd = require('../data/settings.js');
-var md = require('../data/message.js');
 var ed = require('../data/event.js');
 var enm = require('../enums/eventcategoryenum.js');
 var tte = require('../enums/toastrtypeenum.js');
@@ -18,12 +17,18 @@ router.get('/', (req, res, next) => {
         if (err) {
           return next(err);
         } else {
-          res.render('index', {
+
+          var homeViewModel = {
             'title': 'recent',
             'isauthenticated': req.session.isauthenticated,
             'posts': lastThirtyDays,
-            'yearAndPosts': yearAndPosts
-          });
+            'yearAndPosts': yearAndPosts,
+            'toastr_messages': req.session.toastr_messages
+          };
+
+          req.session.toastr_messages = null;
+
+          res.render('index', homeViewModel);
         }
       })
     }
@@ -117,47 +122,6 @@ router.get('/about', (req, res, next) => {
   })
 });
 
-// contact
-router.get('/contact', (req, res, next) => {
-  let messageViewModel = {
-    'title': 'send message',
-    'isauthenticated': req.session.isauthenticated,
-    'yearAndPosts': []
-  };
-
-  pd.getAllArchived(function (err, yearAndPosts) {
-    if (err) {
-      return next(err);
-    } else {
-      messageViewModel.yearAndPosts = yearAndPosts;
-      res.render('contact', messageViewModel);
-    }
-  })
-}).post('/contact/add', (req, res, next) => {
-  let messageCreatedby = req.body.messageCreatedby === '' ? 'anonymous' : req.body.messageCreatedby,
-    messageBody = req.body.messageBody,
-    ipAddress = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
-
-  // TODO: add check logic on front end as well
-  if (messageBody.trim() === '') {
-    res.redirect('../contact'); // fail, TODO: show error message?
-  }
-  else if (messageCreatedby.length > 100) {
-    res.redirect('../contact'); // fail, TODO: show error message?
-  }
-  else if (messageBody.length > 512) {
-    res.redirect('../contact'); // fail, TODO: show error message?
-  } else {
-    md.insertMessage(ipAddress, messageBody, messageCreatedby, function (err) {
-      if (err) {
-        return next(err);
-      } else {
-        res.redirect('../');
-      }
-    })
-  }
-});
-
 // logout
 router.get('/logout', (req, res, next) => {
   req.session.destroy(function (err) {
@@ -179,7 +143,7 @@ router.get('/login', (req, res, next) => {
     res.render('login',
       {
         title: 'login',
-        'toastr_messages': tstrmsgs
+
       });
   }
 }).post('/login', (req, res, next) => {
@@ -188,6 +152,7 @@ router.get('/login', (req, res, next) => {
   } else {
     auth.validatePassword(req.body.secretKey, function (valid) {
       if (valid) {
+
         // welcome valid user
         req.session.isauthenticated = true;
         res.redirect('../');
@@ -211,7 +176,7 @@ router.get('/login', (req, res, next) => {
           if (err) {
             return next(err);
           } else {
-            res.redirect('../login');
+            res.redirect('../');
           }
         });
       }
