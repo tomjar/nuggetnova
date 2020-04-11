@@ -7,18 +7,18 @@
   },
   "dependencies": {
     "bootstrap": "^4.4.1",
-    "cookie-parser": "~1.4.3",
+    "cookie-parser": "^1.4.5",
     "debug": "~2.6.9",
     "express": "~4.16.0",
     "express-session": "^1.17.0",
     "http-errors": "~1.6.2",
-    "jquery": "^3.4.1",
+    "jquery": "^3.5.0",
     "less-middleware": "^3.1.0",
     "morgan": "~1.9.0",
-    "pg": "^7.18.1",
+    "pg": "^7.18.2",
     "popper.js": "^1.16.1",
     "toastr": "^2.1.4",
     "trumbowyg": "^2.21.0",
-    "vash": "^0.12.9"
+    "vash": "^0.12.10"
   }
 }
