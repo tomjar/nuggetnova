@@ -44,7 +44,8 @@ var PostData = {
     getPostByName: function (name, callback) {
         db.query('SELECT id, header, createtimestamp, modifytimestamp, ispublished, description, name, category, body FROM nn."Post" WHERE lower(name)=$1;',
             [name], (err, qres) => {
-                callback(err, qres.rows[0]);
+                let data = typeof qres === 'undefined' ? null : qres.rows[0];
+                callback(err, data);
             })
     },
     getAll: function (callback) {

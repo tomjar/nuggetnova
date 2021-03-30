@@ -19,8 +19,10 @@
 
 * **Warning: presently this project is not in user friendly state, it is definitely not pick off the shelf and use state but I will continue to improve the documentation and the user friendliness of the code base**
 * install postgresql on your local Linux computer
-  * $ sudo apt-get install postgresql
-  * $ setup the postgres account and password (TODO)
+  * $ sudo apt-get install postgresql-12
+  * $ sudo -u postgres psql
+      * make sure your pg_hba.conf is local all postgres peer
+      * ALTER USER postgres PASSWORD 'thepassword';
   * run this SQL script to get your database set up
   
 <pre><code>
