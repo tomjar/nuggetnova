@@ -54,7 +54,7 @@ var PostData = {
                 callback(err, {});
             }
 
-            let data = qres.rows,
+            let data = typeof qres === 'undefined' ? [] : qres.rows,
                 today = new Date(),
                 all = data.map(item => {
                     return {
@@ -80,7 +80,7 @@ var PostData = {
                 callback(err, {});
             }
 
-            let data = qres.rows,
+            let data = typeof qres === 'undefined' ? [] : qres.rows,
                 today = new Date(),
                 all = data.map(item => {
                     return {
@@ -104,7 +104,7 @@ var PostData = {
                 callback(err, {});
             }
 
-            let data = qres.rows,
+            let data = typeof qres === 'undefined' ? [] : qres.rows,
                 today = new Date(),
                 priorDate = new Date().setDate(today.getDate() - 30),
                 lastThirtyDays = data.filter(item => {
@@ -132,7 +132,7 @@ var PostData = {
                 callback(err, {});
             }
 
-            let data = qres.rows,
+            let data = typeof qres === 'undefined' ? [] : qres.rows,
                 uniqueYears = data.map(item => {
                     return item.createtimestamp.getFullYear();
                 }).filter((item, index, arr) => {
