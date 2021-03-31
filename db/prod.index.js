@@ -6,7 +6,7 @@ const config = {
   connectionTimeoutMillis: 5000,
   ssl:{
     rejectUnauthorized: false,
-    ca:process.env.CA_CERT
+    ca: process.env.CA_CERT
   }
 }
 
