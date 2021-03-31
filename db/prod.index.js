@@ -1,7 +1,7 @@
 const { Pool } = require('pg')
 
 const config = {
-  connectionString: process.env.HEROKU_POSTGRESQL_BLACK_URL,
+  connectionString: process.env.DATABASE_URL,
   idleTimeoutMillis: 30000,
   connectionTimeoutMillis: 5000,
   ssl:{
